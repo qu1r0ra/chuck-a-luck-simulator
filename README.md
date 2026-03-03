@@ -73,6 +73,7 @@ For a detailed look at the internal design, statistical methodology, and archite
 To run the simulator and development tools, you will need:
 
 1. **R:** The core environment. Version `4.5.2` or later is recommended.
+2. **GNU Make:** (Optional) Highly recommended for automating development tasks (installation, testing, and linting). While all R commands can technically be executed manually, `make` provides a much simpler and standardized interface.
 
 ### 3.2. CLI Entry Points
 
@@ -82,6 +83,7 @@ This project provides unified `make` entry points for common tasks:
 - **`make test`**: Executes the full `testthat` suite.
 - **`make lint`**: Runs code quality checks via `lintr`.
 - **`make doc`**: Rebuilds the `NAMESPACE` and help files using `roxygen2`.
+- **`make check`**: Runs the full pre-push lifecycle (doc, format, lint, and test).
 
 ### 3.3. Reproducing the Results
 
@@ -107,4 +109,5 @@ This project provides unified `make` entry points for common tasks:
 ## 4. References
 
 [1] "Chuck-A-Luck," _Dice Play_. <https://www.dice-play.com/Games/ChuckALuck.htm>
+
 [2] "Chuck-a-Luck," _Wizard of Odds_. <https://wizardofodds.com/games/chuck-a-luck/>
