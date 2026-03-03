@@ -2,13 +2,16 @@
 % Please edit documentation in R/statistics.R
 \name{get_theoretical_prob}
 \alias{get_theoretical_prob}
-\title{Get the theoretical probability for an exact number of matches}
+\title{Get theoretical probability for a match count}
 \usage{
 get_theoretical_prob(matches)
 }
 \arguments{
-\item{matches}{The target number of matches (0, 1, 2, or 3)}
+\item{matches}{[integer] The target number of matches (0-3)}
+}
+\value{
+[numeric] The theoretical probability
 }
 \description{
-Get the theoretical probability for an exact number of matches
+Get theoretical probability for a match count
 }

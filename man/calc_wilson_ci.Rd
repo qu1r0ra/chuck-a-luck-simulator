@@ -2,15 +2,20 @@
 % Please edit documentation in R/statistics.R
 \name{calc_wilson_ci}
 \alias{calc_wilson_ci}
-\title{Calculate Wilson Score Interval (better for large N and small p)}
+\title{Calculate Wilson Score Interval}
 \usage{
 calc_wilson_ci(p_hat, n, conf_level = 0.95)
 }
 \arguments{
-\item{p_hat}{Sample proportion}
+\item{p_hat}{[numeric] Sample proportion}
 
-\item{conf_level}{Confidence level (default 0.95)}
+\item{n}{[integer] Sample size}
+
+\item{conf_level}{[numeric] Confidence level (default 0.95)}
+}
+\value{
+[numeric vector] Lower and upper bounds
 }
 \description{
-Calculate Wilson Score Interval (better for large N and small p)
+Calculate Wilson Score Interval
 }
