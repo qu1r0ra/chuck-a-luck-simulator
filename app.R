@@ -14,6 +14,7 @@ ui <- page_navbar(
   sidebar = sidebar(
     width = 300,
     numericInput("wager_amount", "Wager Amount ($):", value = 1, min = 1, step = 1),
+    numericInput("initial_bankroll", "Starting Bankroll ($):", value = 1000, min = 0, step = 100),
     selectInput("bet_number", "Number to Bet On:", choices = 1:6, selected = 1),
     numericInput("sim_rounds", "Simulated Rounds per click:", value = 100, min = 1, step = 10),
     actionButton("sim_btn", "Simulate Rounds", class = "btn-primary w-100 mb-2"),
@@ -130,6 +131,12 @@ server <- function(input, output, session) {
   sim_state <- reactiveVal(data.table())
   bankroll <- reactiveVal(1000)
 
+  observeEvent(input$initial_bankroll, {
+    if (nrow(sim_state()) == 0) {
+      bankroll(input$initial_bankroll)
+    }
+  })
+
   current_payouts <- reactive({
     c(
       "0" = input$payout_0,
@@ -152,7 +159,6 @@ server <- function(input, output, session) {
     current_sims <- sim_state()
     if (nrow(current_sims) > 0) {
       new_sims[, Round := Round + max(current_sims$Round)]
-      # data.table rbindlist is extremely fast for large simulations
       sim_state(rbindlist(list(current_sims, new_sims)))
     } else {
       sim_state(new_sims)
@@ -179,7 +185,7 @@ server <- function(input, output, session) {
 
   observeEvent(input$reset_btn, {
     sim_state(data.table())
-    bankroll(1000)
+    bankroll(input$initial_bankroll)
   })
 
   output$bankroll_out <- renderText({
@@ -276,14 +282,20 @@ server <- function(input, output, session) {
     if (nrow(dat) == 0) {
       datatable(data.frame("Message" = "No data. Click Simulate!"), options = list(dom = "t"))
     } else {
-      dat <- dat |>
-        dplyr::mutate(
-          NetWin = sprintf("%s$%d", ifelse(NetWin < 0, "-", ""), abs(NetWin))
-        ) |>
-        dplyr::arrange(dplyr::desc(Round))
+      dat <- sim_state()
+      dat_display <- head(dat[order(-Round)], 1000)
 
-      datatable(dat,
+      dat_display <- dat_display |>
+        dplyr::mutate(
+          NetWin = sprintf(
+            "%s$%s",
+            ifelse(NetWin < 0, "-", ""), format(abs(NetWin), big.mark = ",")
+          )
+        )
+
+      datatable(dat_display,
         options = list(pageLength = 15, deferRender = TRUE, scrollY = 400),
+        caption = "Showing the last 1,000 rounds only for performance.",
         rownames = FALSE,
         colnames = c("Round #", "Die 1", "Die 2", "Die 3", "Matches", "Net Payout")
       )
