@@ -9,7 +9,7 @@ run:
 
 # Install necessary R dependencies
 install:
-	Rscript -e "install.packages(c('shiny', 'bslib', 'bsicons', 'DT', 'ggplot2', 'dplyr', 'styler', 'lintr'), repos='https://cloud.r-project.org')"
+	Rscript -e "install.packages(c('bsicons', 'bslib', 'data.table', 'dplyr', 'DT', 'ggplot2', 'shiny', 'styler', 'lintr', 'testthat'), repos='https://cloud.r-project.org')"
 
 # Format R code
 format:
@@ -19,3 +19,7 @@ format:
 # Lint R code
 lint:
 	Rscript -e "lintr::lint_dir()"
+
+# Run tests
+test:
+	Rscript -e "testthat::test_dir('tests/testthat')"
