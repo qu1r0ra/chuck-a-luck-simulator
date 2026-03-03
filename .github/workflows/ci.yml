@@ -35,16 +35,7 @@ jobs:
       - name: Set up R dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: |
-            any::testthat
-            any::shiny
-            any::bslib
-            any::bsicons
-            any::DT
-            any::ggplot2
-            any::dplyr
-            any::data.table
-            any::scales
+          extra-packages: any::remotes
 
       - name: Run tests
         run: |
