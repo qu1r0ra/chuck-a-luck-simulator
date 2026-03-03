@@ -111,3 +111,5 @@ This project provides unified `make` entry points for common tasks:
 [1] "Chuck-A-Luck," _Dice Play_. <https://www.dice-play.com/Games/ChuckALuck.htm>
 
 [2] "Chuck-a-Luck," _Wizard of Odds_. <https://wizardofodds.com/games/chuck-a-luck/>
+
+[3] Taboga, Marco (2021). "Law of Large Numbers", Lectures on probability theory and mathematical statistics. Kindle Direct Publishing. Online appendix. <https://www.statlect.com/asymptotic-theory/law-of-large-numbers>.
