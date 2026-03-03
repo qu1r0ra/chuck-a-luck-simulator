@@ -9,7 +9,7 @@ run:
 
 # Install necessary R dependencies
 install:
-	Rscript -e "install.packages(c('shiny', 'bslib', 'DT', 'ggplot2', 'dplyr', 'styler', 'lintr'), repos='https://cloud.r-project.org')"
+	Rscript -e "install.packages(c('shiny', 'bslib', 'bsicons', 'DT', 'ggplot2', 'dplyr', 'styler', 'lintr'), repos='https://cloud.r-project.org')"
 
 # Format R code
 format:
