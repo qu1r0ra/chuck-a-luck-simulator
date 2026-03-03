@@ -24,7 +24,7 @@ An R Shiny application simulating the dice game '[Chuck-a-Luck](https://www.dice
 
 Chuck-a-Luck (also known as _Bird Cage_) is a simple dice game where players bet on the outcome of three dice.
 
-This application is meant to demonstrate how empirical probabilities eventually converge to their theoretical probabilities as the sample size grows, as per the Law of Large Numbers. That, and to discourage you from gambling by showing how a well-designed game of chance like Chuck-a-Luck is mathematically expected to take away a certain proportion of your wagers over the long run. Or perhaps to encourage you if the establishment did not do their maths correctly (which is never).
+This application serves as a fun demonstration of the **Law of Large Numbers**, showing how empirical probabilities eventually converge to their theoretical values as the sample size grows. That, and to discourage you from gambling by showing how a well-designed game of chance like Chuck-a-Luck is mathematically guaranteed to take away a portion of your wagers over the long run. Or perhaps to encourage you if the establishment did not do their maths correctly (which is never).
 
 ### 1.1. Rules & Payouts
 
