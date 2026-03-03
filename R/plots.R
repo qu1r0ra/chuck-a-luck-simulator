@@ -1,6 +1,7 @@
 library(ggplot2)
 library(dplyr)
 
+#' Plot Law of Large Numbers convergence
 #' @param sim_data [data.frame] Simulation data
 #' @param target_matches [integer] The match count to visualize
 #' @return [ggplot] Convergence plot
@@ -40,6 +41,7 @@ plot_lln_convergence <- function(sim_data, target_matches) {
   }
 }
 
+#' Plot the outcome frequency distribution
 #' @param sim_data [data.frame] Simulation data
 #' @return [ggplot] Distribution bar plot
 #' @export

@@ -11,6 +11,7 @@ get_theoretical_prob <- function(matches) {
   }
 }
 
+#' Get the theoretical win rate
 #' @param payouts [numeric vector] Named vector of payout multipliers
 #' @return [numeric] The theoretical win rate
 #' @export
@@ -20,6 +21,7 @@ get_theoretical_win_rate <- function(payouts = DEFAULT_PAYOUT_MULTIPLIERS) {
   sum(CHUCK_A_LUCK_PROBS[valid_matches])
 }
 
+#' Get the theoretical house edge
 #' @param payouts [numeric vector] Named vector of payout multipliers
 #' @return [numeric] The theoretical house edge
 #' @export
@@ -28,6 +30,7 @@ get_theoretical_house_edge <- function(payouts = DEFAULT_PAYOUT_MULTIPLIERS) {
   -expected_value
 }
 
+#' Calculate sample probability for a target match count
 #' @param sim_data [data.frame] Simulation data with a 'Matches' column
 #' @param target_matches [integer] The match count to calculate probability for
 #' @return [numeric] The sample probability
@@ -40,6 +43,7 @@ calc_sample_probability <- function(sim_data, target_matches) {
   }
 }
 
+#' Calculate the actual sample win rate
 #' @param sim_data [data.frame] Simulation data with 'NetWin' column
 #' @return [numeric] The sample win rate
 #' @export
@@ -51,6 +55,7 @@ calc_win_rate <- function(sim_data) {
   }
 }
 
+#' Calculate the actual sample house edge
 #' @param sim_data [data.frame] Simulation data with 'NetWin' column
 #' @param wager_per_round [numeric] The amount bet per round
 #' @return [numeric] The sample house edge
@@ -65,6 +70,7 @@ calc_sample_house_edge <- function(sim_data, wager_per_round) {
   }
 }
 
+#' Calculate Margin of Error for a proportion
 #' @param p_hat [numeric] Sample proportion
 #' @param n [integer] Sample size
 #' @param conf_level [numeric] Confidence level (e.g., 0.95)
@@ -79,6 +85,7 @@ calc_moe_proportion <- function(p_hat, n, conf_level = 0.95) {
   }
 }
 
+#' Calculate Wilson Score Interval
 #' @param p_hat [numeric] Sample proportion
 #' @param n [integer] Sample size
 #' @param conf_level [numeric] Confidence level (default 0.95)
@@ -100,6 +107,7 @@ calc_wilson_ci <- function(p_hat, n, conf_level = 0.95) {
   c(max(0, lower), min(1, upper))
 }
 
+#' Format a confidence interval for display
 #' @param p_hat [numeric] Sample proportion
 #' @param moe [numeric] Margin of Error
 #' @return [character] Formatted interval string
