@@ -1,6 +1,9 @@
 library(ggplot2)
 library(dplyr)
 
+#' @param sim_data [data.frame] Simulation data
+#' @param target_matches [integer] The match count to visualize
+#' @return [ggplot] Convergence plot
 #' @export
 plot_lln_convergence <- function(sim_data, target_matches) {
   if (nrow(sim_data) == 0) {
@@ -37,6 +40,8 @@ plot_lln_convergence <- function(sim_data, target_matches) {
   }
 }
 
+#' @param sim_data [data.frame] Simulation data
+#' @return [ggplot] Distribution bar plot
 #' @export
 plot_outcome_distribution <- function(sim_data) {
   if (nrow(sim_data) == 0) {

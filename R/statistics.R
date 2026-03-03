@@ -1,5 +1,6 @@
-#' Get the theoretical probability for an exact number of matches
-#' @param matches The target number of matches (0, 1, 2, or 3)
+#' Get theoretical probability for a match count
+#' @param matches [integer] The target number of matches (0-3)
+#' @return [numeric] The theoretical probability
 #' @export
 get_theoretical_prob <- function(matches) {
   prob <- CHUCK_A_LUCK_PROBS[as.character(matches)]
@@ -10,6 +11,8 @@ get_theoretical_prob <- function(matches) {
   }
 }
 
+#' @param payouts [numeric vector] Named vector of payout multipliers
+#' @return [numeric] The theoretical win rate
 #' @export
 get_theoretical_win_rate <- function(payouts = DEFAULT_PAYOUT_MULTIPLIERS) {
   winning_matches <- names(payouts[payouts > 0])
@@ -17,12 +20,17 @@ get_theoretical_win_rate <- function(payouts = DEFAULT_PAYOUT_MULTIPLIERS) {
   sum(CHUCK_A_LUCK_PROBS[valid_matches])
 }
 
+#' @param payouts [numeric vector] Named vector of payout multipliers
+#' @return [numeric] The theoretical house edge
 #' @export
 get_theoretical_house_edge <- function(payouts = DEFAULT_PAYOUT_MULTIPLIERS) {
   expected_value <- sum(payouts[names(CHUCK_A_LUCK_PROBS)] * CHUCK_A_LUCK_PROBS)
   -expected_value
 }
 
+#' @param sim_data [data.frame] Simulation data with a 'Matches' column
+#' @param target_matches [integer] The match count to calculate probability for
+#' @return [numeric] The sample probability
 #' @export
 calc_sample_probability <- function(sim_data, target_matches) {
   if (nrow(sim_data) == 0) {
@@ -32,6 +40,8 @@ calc_sample_probability <- function(sim_data, target_matches) {
   }
 }
 
+#' @param sim_data [data.frame] Simulation data with 'NetWin' column
+#' @return [numeric] The sample win rate
 #' @export
 calc_win_rate <- function(sim_data) {
   if (nrow(sim_data) == 0) {
@@ -41,6 +51,9 @@ calc_win_rate <- function(sim_data) {
   }
 }
 
+#' @param sim_data [data.frame] Simulation data with 'NetWin' column
+#' @param wager_per_round [numeric] The amount bet per round
+#' @return [numeric] The sample house edge
 #' @export
 calc_sample_house_edge <- function(sim_data, wager_per_round) {
   if (nrow(sim_data) == 0 || wager_per_round == 0) {
@@ -52,6 +65,10 @@ calc_sample_house_edge <- function(sim_data, wager_per_round) {
   }
 }
 
+#' @param p_hat [numeric] Sample proportion
+#' @param n [integer] Sample size
+#' @param conf_level [numeric] Confidence level (e.g., 0.95)
+#' @return [numeric] The margin of error
 #' @export
 calc_moe_proportion <- function(p_hat, n, conf_level = 0.95) {
   if (n == 0) {
@@ -62,9 +79,10 @@ calc_moe_proportion <- function(p_hat, n, conf_level = 0.95) {
   }
 }
 
-#' Calculate Wilson Score Interval (better for large N and small p)
-#' @param p_hat Sample proportion
-#' @param conf_level Confidence level (default 0.95)
+#' @param p_hat [numeric] Sample proportion
+#' @param n [integer] Sample size
+#' @param conf_level [numeric] Confidence level (default 0.95)
+#' @return [numeric vector] Lower and upper bounds
 #' @export
 calc_wilson_ci <- function(p_hat, n, conf_level = 0.95) {
   if (n == 0) {
@@ -82,6 +100,9 @@ calc_wilson_ci <- function(p_hat, n, conf_level = 0.95) {
   c(max(0, lower), min(1, upper))
 }
 
+#' @param p_hat [numeric] Sample proportion
+#' @param moe [numeric] Margin of Error
+#' @return [character] Formatted interval string
 #' @export
 format_confidence_interval <- function(p_hat, moe) {
   lower <- max(0, p_hat - moe)

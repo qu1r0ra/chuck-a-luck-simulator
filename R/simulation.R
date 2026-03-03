@@ -1,10 +1,10 @@
 #' Simulate a single round or multiple rounds of Chuck-a-Luck
 #'
-#' @param n_rounds Number of rounds to simulate
-#' @param bet_number The number bet on (1-6)
-#' @param wager The amount wagered per round
-#' @param payouts Named numeric vector of payout multipliers for 0, 1, 2, and 3 matches
-#' @return A data frame containing the simulation results
+#' @param n_rounds [integer] Number of rounds to simulate
+#' @param bet_number [integer] The number bet on (1-6)
+#' @param wager [numeric] The amount wagered per round
+#' @param payouts [numeric vector] Named vector of payout multipliers
+#' @return [data.frame] Contains Round, Die1-3, Matches, and NetWin
 #' @export
 simulate_chuck_a_luck <- function(n_rounds, bet_number, wager,
                                   payouts = DEFAULT_PAYOUT_MULTIPLIERS) {
