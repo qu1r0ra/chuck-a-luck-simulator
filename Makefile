@@ -30,4 +30,4 @@ doc:
 	Rscript -e "roxygen2::roxygenize()"
 
 # Full check before pushing to Git
-check: doc format lint test
+check: format lint test doc
