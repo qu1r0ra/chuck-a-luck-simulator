@@ -30,11 +30,13 @@ This application serves as a fun demonstration of the **Law of Large Numbers**, 
 
 Players place their bets on any number from 1 to 6. The operator then rolls three dice and pays out an amount **relative to the original wager** (on top of returning the wager itself) based on how many dice match the player's chosen number:
 
-- **1 Match:** Paid at **1 to 1** (win \$1 for every \$1 wagered).
-- **2 Matches:** Paid at **2 to 1** (win \$2 for every \$1 wagered).
-- **3 Matches:** Paid at **3 to 1** (win \$3 for every \$1 wagered).
+| Outcome       | Payout Ratio | Net Win Example               |
+| :------------ | :----------- | :---------------------------- |
+| **1 Match**   | 1 to 1       | Win \$1 for every \$1 wagered |
+| **2 Matches** | 2 to 1       | Win \$2 for every \$1 wagered |
+| **3 Matches** | 3 to 1       | Win \$3 for every \$1 wagered |
 
-Payouts vary across establishments, with some reaching a **12 to 1** payout for 3 matches (winning \$12 for every \$1 wagered). While these odds may appear somewhat favorable to some, the house maintains a significant mathematical advantage. In a standard setup, the house edge is **7.87%**, meaning for every \$100 wagered, the player is statistically expected to lose \$7.87. Even with the increased 12 to 1 payout, the house edge remains at **3.70%**.
+Payouts may vary across establishments, with some reaching a **12 to 1** payout for 3 matches (winning \$12 for every \$1 wagered). While these odds may appear somewhat favorable to some, the house maintains a significant mathematical advantage. In a standard setup, the house edge is **7.87%**, meaning for every \$100 wagered, the player is statistically expected to lose \$7.87. Even with the increased 12 to 1 payout, the house edge remains at **3.70%**.
 
 ## 2. Project Structure
 
