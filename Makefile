@@ -23,3 +23,7 @@ lint:
 # Run tests
 test:
 	Rscript -e "testthat::test_dir('tests/testthat')"
+
+# Generate documentation and NAMESPACE
+doc:
+	Rscript -e "roxygen2::roxygenize()"
