@@ -13,10 +13,7 @@ CHUCK_A_LUCK_PROBS <- c(
 )
 
 utils::globalVariables(c(
-  # Variables used in dplyr and ggplot
   "Matches", "CumulativeCount", "Round", "NetWin", "count", "Theoretical",
-
-  # Functions defined across scripts but used globally via source()
   "CHUCK_A_LUCK_PROBS", "DEFAULT_PAYOUT_MULTIPLIERS",
   "simulate_chuck_a_luck", "get_theoretical_prob", "get_theoretical_win_rate",
   "get_theoretical_house_edge", "calc_win_rate", "calc_sample_probability",
