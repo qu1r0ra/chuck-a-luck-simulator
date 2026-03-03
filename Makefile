@@ -1,4 +1,4 @@
-.PHONY: run install format lint
+.PHONY: run install format lint test doc check
 
 # Default target
 all: run
@@ -28,3 +28,6 @@ test:
 # Generate documentation and NAMESPACE
 doc:
 	Rscript -e "roxygen2::roxygenize()"
+
+# Full check before pushing to Git
+check: doc format lint test
