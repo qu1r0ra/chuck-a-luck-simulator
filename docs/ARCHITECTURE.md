@@ -1,35 +1,76 @@
-# Architecture: Chuck-a-Luck Statistical Simulator
+# Project Architecture
 
-This document outlines the architectural decisions and design patterns used in the Chuck-a-Luck simulator.
+This document describes the architectural design and directory structure of the `chuck-a-luck-simulator` project. It serves as a guide for developers and contributors to understand the core components and their interactions.
 
-## 1. Core Logic & Data Management
+## Directory Structure Overview
 
-The application uses a modular structure to separate simulation logic, statistical analysis, and data visualization.
+```text
+.
+├── .github/                # CI/CD Workflows (GitHub Actions)
+├── docs/                   # Project documentation
+│   └── ARCHITECTURE.md     # Technical design (this document)
+├── dump/                   # Temporary samples and reference material
+├── man/                    # Generated help documentation (.Rd files)
+├── tests/                  # Unit testing suite
+│   ├── testthat/           # Core component tests
+│   └── testthat.R          # Test entry point
+├── R/                      # Core logic modules
+│   ├── constants.R         # Shared theoretical values and global variables
+│   ├── plots.R             # Visualization logic (ggplot2)
+│   ├── simulation.R        # RNG engine (vectorized dice rolls)
+│   └── statistics.R        # Analytical functions and CI calculations
+├── app.R                   # Main Shiny application (UI and Server)
+├── DESCRIPTION             # Project manifest and dependency management
+├── LICENSE                 # MIT License details
+├── Makefile                # Unified development entry points
+└── NAMESPACE               # Generated package exports
+```
 
-- **`data.table` for High Performance**: To support large-scale simulations (millions of rounds) without performance degradation, the application uses `data.table` for its reactive simulation state. `data.table`'s memory efficiency and vectorized operations (like `rbindlist`) ensure that the UI remains responsive even as data grows.
-- **Vectorized Simulation**: The simulation engine in `R/simulation.R` uses R's vectorized `sample()` and logical operations to generate thousands of rounds simultaneously, rather than using slow loops.
+## Core Design Principles
 
-## 2. Statistical Methodology
+### 1. High-Performance Data Handling
 
-- **Wilson Score Interval**: We use the Wilson Score Interval for calculating 95% confidence intervals for proportions. This was chosen over the standard Wald (Normal) approximation because it provides better coverage and accuracy when:
-  - The probability is very low (e.g., rolling 3 matches: $1/216 \approx 0.0046$).
-  - The sample size is small.
-- **Law of Large Numbers (LLN)**: The app is designed to empirically demonstrate LLN. The convergence graph shows the cumulative sample probability approaching the theoretical value as $N$ increases.
-- **Namespace Management**: To ensure robustness, we use explicit namespacing (e.g., `stats::qnorm`) and maintain a `R/constants.R` file for global variables and shared theoretical values.
+To support simulations of up to millions of rounds without UI lag, the project leverages **`data.table`**.
 
-## 3. Frontend Architecture
+- **Memory Efficiency**: Uses fast, in-place modifications and optimized row-binding (`rbindlist`).
+- **Reactive State**: The main simulation history is stored as a `data.table` within a Shiny `reactiveVal`.
 
-- **Shiny & bslib**: Built with R Shiny using the `bslib` package for a modern, responsive user interface.
-- **Reactive Design**: The application uses `reactiveVal` for simulation state and bankroll, ensuring that all UI elements (value boxes, plots, and tables) update atomically when new simulations are run.
-- **Modular Scripts**:
-  - `constants.R`: Ground truth for probabilities and shared constants.
-  - `simulation.R`: The core RNG engine.
-  - `statistics.R`: Analytical logic and CI calculations.
-  - `plots.R`: `ggplot2` visualization templates.
+### 2. Statistical Robustness (Wilson Score Interval)
 
-## 4. Development & CI Lifecycle
+We prioritize mathematical accuracy over simple approximations.
 
-- **Dependency Management**: The `DESCRIPTION` file serves as the project's manifest. We use the `remotes` package (via `make install`) to ensure all developers and CI environments are synchronized.
-- **Automated Documentation**: We use `roxygen2` to manage the `NAMESPACE` and generate `.Rd` help files. Running `make doc` ensures that the public API exports are always up to date.
-- **Unit Testing**: The project includes a comprehensive suite of tests in `tests/testthat/`, validating both simulation results and statistical accuracy.
-- **Continuous Integration**: GitHub Actions is configured to run lints and tests on every push, ensuring that changes don't break core statistical logic or UI functionality.
+- Unlike the standard Wald (Normal) confidence interval, we implement the **Wilson Score Interval**.
+- This is critical for Chuck-a-Luck because the probability of rolling 3 matches ($1/216$) is small, and the sample size $N$ can vary. The Wilson interval provides more reliable coverage in these edge cases.
+
+### 3. Modular Architecture
+
+The logic is strictly decoupled to ensure maintainability:
+
+- **`simulation.R`**: Stateless RNG logic that mimics the game mechanics.
+- **`statistics.R`**: Pure analytical functions that take simulation data and return metrics.
+- **`plots.R`**: Reusable plotting templates.
+- **`app.R`**: Minimalist orchestration of UI and reactive server logic.
+
+### 4. Unified Public API
+
+The project follows standard R package conventions. We use **`roxygen2`** to manage the `NAMESPACE`.
+
+- Every function meant for external use is decorated with `@export`.
+- Running `make doc` ensures that the `NAMESPACE` and internal documentation are synchronized.
+
+### 5. Automated Quality Control & CI/CD
+
+- **Testing**: A comprehensive suite of unit tests covers logic verification in `tests/testthat/`.
+- **Linting & Formatting**: Code is standardized using `styler` and `lintr` to maintain PEP 8-equivalent standards for R.
+- **GitHub Actions**: A automated workflow runs lints and tests on every push, ensuring that the main branch remains stable.
+
+## Tools & Dependencies
+
+- **Shiny**: Web framework for interactive simulation.
+- **bslib / bsicons**: Modern, Bootstrap-based UI components.
+- **data.table**: High-performance data manipulation.
+- **ggplot2**: Grammatical visualization engine.
+- **DT**: Interactive data table displays.
+- **testthat**: Unit testing framework.
+- **roxygen2**: Documentation and namespace management.
+- **remotes**: Dependency resolution from manifest.
