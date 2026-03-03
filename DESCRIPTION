@@ -12,7 +12,7 @@ Description: Simulates the 'Chuck-a-Luck' dice game to empirically demonstrate
     frequentist statistics concepts, specifically the Law of Large Numbers.
     The 'shiny' application provides visualizations of convergence and calculates
     confidence intervals for matching dice outcomes.
-License: MIT
+License: `use_mit_license()`
 Encoding: UTF-8
 Imports:
     bsicons,
