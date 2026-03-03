@@ -1,0 +1,35 @@
+Package: chuck.a.luck.simulator
+Title: Statistical Simulator for the Game 'Chuck-a-Luck'
+Version: 0.1.0
+Authors@R:
+    person(
+        "Christian Joseph", "Bunyi",
+        email = "cj.bunyi.dev@gmail.com",
+        role = c("aut", "cre"),
+        comment = c(ORCID = "0009-0009-6703-0144")
+    )
+Description: Simulates the 'Chuck-a-Luck' dice game to empirically demonstrate
+    frequentist statistics concepts, specifically the Law of Large Numbers.
+    The 'shiny' application provides visualizations of convergence and calculates
+    confidence intervals for matching dice outcomes.
+License: MIT
+Encoding: UTF-8
+Imports:
+    bsicons,
+    bslib,
+    data.table,
+    dplyr,
+    DT,
+    ggplot2,
+    scales,
+    shiny
+Suggests:
+    lintr,
+    remotes,
+    roxygen2,
+    styler,
+    testthat
+URL: https://github.com/qu1r0ra/chuck-a-luck-simulator
+BugReports: https://github.com/qu1r0ra/chuck-a-luck-simulator/issues
+Config/testthat/edition: 3
+RoxygenNote: 7.3.3

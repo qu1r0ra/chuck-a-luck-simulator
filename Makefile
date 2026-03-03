@@ -7,9 +7,10 @@ all: run
 run:
 	Rscript -e "shiny::runApp(port=8080)"
 
-# Install necessary R dependencies
+# Install necessary R dependencies from DESCRIPTION file
 install:
-	Rscript -e "install.packages(c('bsicons', 'bslib', 'data.table', 'dplyr', 'DT', 'ggplot2', 'shiny', 'styler', 'lintr', 'testthat'), repos='https://cloud.r-project.org')"
+	Rscript -e "if (!requireNamespace('remotes', quietly = TRUE)) install.packages('remotes')"
+	Rscript -e "remotes::install_deps(dependencies = TRUE, repos = 'https://cloud.r-project.org')"
 
 # Format R code
 format:
