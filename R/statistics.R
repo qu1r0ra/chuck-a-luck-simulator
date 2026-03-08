@@ -107,6 +107,49 @@ calc_wilson_ci <- function(p_hat, n, conf_level = 0.95) {
   c(max(0, lower), min(1, upper))
 }
 
+#' Calculate Agresti-Coull Confidence Interval
+#' @param p_hat [numeric] Sample proportion
+#' @param n [integer] Sample size
+#' @param conf_level [numeric] Confidence level (default 0.95)
+#' @return [numeric vector] Lower and upper bounds
+#' @export
+calc_agresti_coull_ci <- function(p_hat, n, conf_level = 0.95) {
+  if (n == 0) {
+    return(c(0, 0))
+  }
+
+  z <- stats::qnorm(1 - (1 - conf_level) / 2)
+  tilde_n <- n + z^2
+  tilde_p <- (p_hat * n + z^2 / 2) / tilde_n
+
+  moe <- z * sqrt(tilde_p * (1 - tilde_p) / tilde_n)
+
+  c(max(0, tilde_p - moe), min(1, tilde_p + moe))
+}
+
+#' Calculate Wald (Normal) Confidence Interval
+#' @param p_hat [numeric] Sample proportion
+#' @param n [integer] Sample size
+#' @param conf_level [numeric] Confidence level (default 0.95)
+#' @return [numeric vector] Lower and upper bounds
+#' @export
+calc_wald_ci <- function(p_hat, n, conf_level = 0.95) {
+  if (n == 0) {
+    return(c(0, 0))
+  }
+
+  moe <- calc_moe_proportion(p_hat, n, conf_level)
+  c(max(0, p_hat - moe), min(1, p_hat + moe))
+}
+
+#' Format a confidence interval for display from a vector
+#' @param ci [numeric vector] Lower and upper bounds
+#' @return [character] Formatted interval string
+#' @export
+format_ci_vector <- function(ci) {
+  sprintf("[%s, %s]", format(round(ci[1], 4), nsmall = 4), format(round(ci[2], 4), nsmall = 4))
+}
+
 #' Format a confidence interval for display
 #' @param p_hat [numeric] Sample proportion
 #' @param moe [numeric] Margin of Error
