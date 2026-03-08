@@ -109,13 +109,43 @@ ui <- page_navbar(
         card_header("Frequentist Estimates for Chosen Outcome"),
         p(strong("Target Outcome: "), textOutput("target_outcome_text", inline = TRUE)),
         tags$ul(
-          tags$li(strong("Sample Probability: "), textOutput("sample_prob_out", inline = TRUE)),
+          tags$li(strong("MLE (Sample Probability): "), textOutput("sample_prob_out", inline = TRUE)),
           tags$li(strong("Theoretical Probability: "), textOutput("theo_prob_out", inline = TRUE)),
-          tags$li(strong("Normal 95% CI (MOE): "), "±", textOutput("moe_out", inline = TRUE)),
-          tags$li(strong("Normal 95% CI Range: "), textOutput("ci_out", inline = TRUE)),
-          tags$li(strong("Wilson Score 95% CI: "), textOutput("wilson_ci_out", inline = TRUE))
+          tags$li(strong("Wald 95% CI: "), textOutput("ci_out", inline = TRUE)),
+          tags$li(strong("Wilson Score 95% CI: "), textOutput("wilson_ci_out", inline = TRUE)),
+          tags$li(strong("Agresti-Coull 95% CI: "), textOutput("agresti_ci_out", inline = TRUE))
         )
       )
+    )
+  ),
+  nav_panel(
+    "Confidence Analysis",
+    layout_columns(
+      col_widths = c(6, 6),
+      card(
+        card_header(
+          "Side-by-Side CI Comparison",
+          tooltip(
+            bsicons::bs_icon("info-circle"),
+            "Compares the final interval width and centering for all three methods."
+          )
+        ),
+        plotOutput("plot_ci_comp")
+      ),
+      card(
+        card_header(
+          "CI Behavior over Time",
+          tooltip(
+            bsicons::bs_icon("info-circle"),
+            "Visualizes how uncertainty (the ribbon width) shrinks as sample size increases."
+          )
+        ),
+        plotOutput("plot_ci_grow")
+      )
+    ),
+    card(
+      card_header("Numerical Summary of Estimates"),
+      tableOutput("ci_metrics_table")
     )
   ),
   nav_panel(
@@ -171,16 +201,22 @@ server <- function(input, output, session) {
     dat <- sim_state()
     n <- nrow(dat)
     if (n == 0) {
-      "[0.0000, 0.0000]"
-    } else {
-      tgt <- as.numeric(input$target_outcome)
-      p_hat <- calc_sample_probability(dat, tgt)
-      res <- calc_wilson_ci(p_hat, n)
-      sprintf(
-        "[%s, %s]",
-        format(round(res[1], 4), nsmall = 4), format(round(res[2], 4), nsmall = 4)
-      )
+      return("[0.0000, 0.0000]")
     }
+    tgt <- as.numeric(input$target_outcome)
+    p_hat <- calc_sample_probability(dat, tgt)
+    format_ci_vector(calc_wilson_ci(p_hat, n))
+  })
+
+  output$agresti_ci_out <- renderText({
+    dat <- sim_state()
+    n <- nrow(dat)
+    if (n == 0) {
+      return("[0.0000, 0.0000]")
+    }
+    tgt <- as.numeric(input$target_outcome)
+    p_hat <- calc_sample_probability(dat, tgt)
+    format_ci_vector(calc_agresti_coull_ci(p_hat, n))
   })
 
   observeEvent(input$reset_btn, {
@@ -267,15 +303,60 @@ server <- function(input, output, session) {
   })
 
   output$ci_out <- renderText({
-    n <- nrow(sim_state())
+    dat <- sim_state()
+    n <- nrow(dat)
     if (n == 0) {
-      "[0, 0]"
-    } else {
-      p_hat <- calc_sample_probability(sim_state(), as.numeric(input$target_outcome))
-      moe <- calc_moe_proportion(p_hat, n)
-      format_confidence_interval(p_hat, moe)
+      return("[0.0000, 0.0000]")
     }
+    p_hat <- calc_sample_probability(dat, as.numeric(input$target_outcome))
+    format_ci_vector(calc_wald_ci(p_hat, n))
   })
+
+  output$plot_ci_comp <- renderPlot({
+    dat <- sim_state()
+    n <- nrow(dat)
+    p_hat <- if (n > 0) calc_sample_probability(dat, as.numeric(input$target_outcome)) else 0
+    plot_ci_comparison(p_hat, n)
+  })
+
+  output$plot_ci_grow <- renderPlot({
+    plot_ci_behavior(sim_state(), as.numeric(input$target_outcome))
+  })
+
+  output$ci_metrics_table <- renderTable(
+    {
+      dat <- sim_state()
+      n <- nrow(dat)
+      if (n == 0) {
+        return(NULL)
+      }
+
+      p_hat <- calc_sample_probability(dat, as.numeric(input$target_outcome))
+      theo <- get_theoretical_prob(as.numeric(input$target_outcome))
+
+      wald <- calc_wald_ci(p_hat, n)
+      wilson <- calc_wilson_ci(p_hat, n)
+      agresti <- calc_agresti_coull_ci(p_hat, n)
+
+      data.frame(
+        Metric = c(
+          "Sample Size (n)", "MLE (p_hat)", "Theoretical (p)",
+          "Wald Interval", "Wilson Interval", "Agresti-Coull"
+        ),
+        Value = c(
+          as.character(n),
+          format(round(p_hat, 4), nsmall = 4),
+          format(round(theo, 4), nsmall = 4),
+          format_ci_vector(wald),
+          format_ci_vector(wilson),
+          format_ci_vector(agresti)
+        )
+      )
+    },
+    striped = TRUE,
+    hover = TRUE,
+    bordered = TRUE
+  )
 
   output$history_table <- renderDT({
     dat <- sim_state()
