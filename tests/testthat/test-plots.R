@@ -24,3 +24,14 @@ test_that("Distribution plot handles empty data", {
   p <- plot_outcome_distribution(data.frame())
   expect_s3_class(p, "ggplot")
 })
+
+test_that("CI comparison plot produces a ggplot object", {
+  p <- plot_ci_comparison(0.5, 100)
+  expect_s3_class(p, "ggplot")
+})
+
+test_that("CI behavioral plot produces a ggplot object", {
+  sim <- data.frame(Round = 1:100, Matches = sample(0:3, 100, replace = TRUE))
+  p <- plot_ci_behavior(sim, 2)
+  expect_s3_class(p, "ggplot")
+})
