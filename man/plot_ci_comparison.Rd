@@ -7,14 +7,14 @@
 plot_ci_comparison(p_hat, n, conf_level = 0.95)
 }
 \arguments{
-\item{p_hat}{[numeric] Sample proportion}
+\item{p_hat}{\link{numeric} Sample proportion}
 
-\item{n}{[integer] Sample size}
+\item{n}{\link{integer} Sample size}
 
-\item{conf_level}{[numeric] Confidence level}
+\item{conf_level}{\link{numeric} Confidence level}
 }
 \value{
-[ggplot] Error bar plot
+\link[ggplot2:ggplot]{ggplot2::ggplot} Error bar plot
 }
 \description{
 Plot Comparison of Confidence Intervals

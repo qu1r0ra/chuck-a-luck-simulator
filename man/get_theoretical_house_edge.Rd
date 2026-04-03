@@ -7,10 +7,10 @@
 get_theoretical_house_edge(payouts = DEFAULT_PAYOUT_MULTIPLIERS)
 }
 \arguments{
-\item{payouts}{[numeric vector] Named vector of payout multipliers}
+\item{payouts}{\link{numeric vector} Named vector of payout multipliers}
 }
 \value{
-[numeric] The theoretical house edge
+\link{numeric} The theoretical house edge
 }
 \description{
 Get the theoretical house edge

@@ -14,6 +14,10 @@ Description: Simulates the 'Chuck-a-Luck' dice game to empirically demonstrate
     confidence intervals for matching dice outcomes.
 License: MIT
 Encoding: UTF-8
+LazyData: true
+ByteCompile: true
+Depends:
+    R (>= 4.1.0)
 Imports:
     bsicons,
     bslib,
@@ -32,4 +36,5 @@ Suggests:
 URL: https://github.com/qu1r0ra/chuck-a-luck-simulator
 BugReports: https://github.com/qu1r0ra/chuck-a-luck-simulator/issues
 Config/testthat/edition: 3
+Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3

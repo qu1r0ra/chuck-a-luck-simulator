@@ -7,10 +7,15 @@ This document describes the architectural design and directory structure of the 
 ```text
 .
 ├── .github/                # CI/CD Workflows (GitHub Actions)
-├── docs/                   # Project documentation
-│   └── ARCHITECTURE.md     # Technical design (this document)
+├── docs/                   # Project documentation and reports
+│   ├── architecture.md     # Technical design (this document)
+│   ├── math/               # Mathematical derivation notes
+│   ├── reports/            # Generated PDF manuals and analysis
+│   ├── sample/             # Reference code samples
+│   └── specs/              # Formal project specifications
 ├── dump/                   # Temporary samples and reference material
 ├── man/                    # Generated help documentation (.Rd files)
+├── misc/                   # Project context and personal notes
 ├── tests/                  # Unit testing suite
 │   ├── testthat/           # Core component tests
 │   └── testthat.R          # Test entry point
@@ -57,7 +62,7 @@ The logic is strictly decoupled to ensure maintainability:
 The project follows standard R package conventions. We use **`roxygen2`** to manage the `NAMESPACE`.
 
 - Every function meant for external use is decorated with `@export`.
-- Running `make doc` ensures that the `NAMESPACE` and internal documentation are synchronized.
+- Running `make doc` ensures that the `NAMESPACE` and internal documentation are synchronized, with the visual manual ending up in `docs/reports/`.
 
 ### 5. Automated Quality Control & CI/CD
 

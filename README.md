@@ -45,8 +45,12 @@ A high-level overview of the repository organization:
 ```text
 .
 ├── .github/                # CI/CD Workflows (GitHub Actions)
-├── docs/                   # Project documentation
-│   └── ARCHITECTURE.md     # Technical design and decisions
+├── docs/                   # Project documentation and reports
+│   ├── architecture.md     # Technical design and decisions
+│   ├── math/               # Mathematical derivation notes
+│   ├── reports/            # Generated PDF manuals and analysis
+│   ├── sample/             # Reference code samples
+│   └── specs/              # Formal project specifications
 ├── dump/                   # Temporary samples and reference material
 ├── man/                    # Generated help documentation (.Rd files)
 ├── tests/                  # Unit testing suite
@@ -64,7 +68,7 @@ A high-level overview of the repository organization:
 └── NAMESPACE               # Generated package exports
 ```
 
-For a detailed look at the internal design, statistical methodology, and architectural decisions, see [ARCHITECTURE.md](docs/ARCHITECTURE.md).
+For a detailed look at the internal design, statistical methodology, and architectural decisions, see [architecture.md](docs/architecture.md).
 
 ## 3. Running the Project
 
@@ -82,7 +86,7 @@ This project provides unified `make` entry points for common tasks:
 - **`make run`**: Launches the R Shiny application.
 - **`make test`**: Executes the full `testthat` suite.
 - **`make lint`**: Runs code quality checks via `lintr`.
-- **`make doc`**: Rebuilds the `NAMESPACE` and help files using `roxygen2`.
+- **`make doc`**: Rebuilds the `NAMESPACE`, help files (`man/`), and the PDF manual in `docs/reports/`.
 - **`make check`**: Runs the full pre-push lifecycle (doc, format, lint, and test).
 
 ### 3.3. Reproducing the Results

@@ -7,14 +7,14 @@
 calc_wald_ci(p_hat, n, conf_level = 0.95)
 }
 \arguments{
-\item{p_hat}{[numeric] Sample proportion}
+\item{p_hat}{\link{numeric} Sample proportion}
 
-\item{n}{[integer] Sample size}
+\item{n}{\link{integer} Sample size}
 
-\item{conf_level}{[numeric] Confidence level (default 0.95)}
+\item{conf_level}{\link{numeric} Confidence level (default 0.95)}
 }
 \value{
-[numeric vector] Lower and upper bounds
+\link{numeric vector} Lower and upper bounds
 }
 \description{
 Calculate Wald (Normal) Confidence Interval
