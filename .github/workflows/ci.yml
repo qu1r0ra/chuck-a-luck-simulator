@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  lint:
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -15,29 +15,18 @@ jobs:
       - name: Set up R
         uses: r-lib/actions/setup-r@v2
 
-      - name: Install lintr
-        run: install.packages('lintr')
-        shell: Rscript {0}
-
-      - name: Lint
-        run: lintr::lint_dir()
-        shell: Rscript {0}
-
-  test:
-    needs: lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Set up R
-        uses: r-lib/actions/setup-r@v2
-
-      - name: Set up R dependencies
+      - name: Install R system dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::remotes
+          extra-packages: |
+            any::remotes
+            any::styler
+            any::lintr
+            any::testthat
+            any::roxygen2
+
+      - name: Lint code
+        run: make lint
 
       - name: Run tests
-        run: |
-          testthat::test_dir('tests/testthat', reporter = 'summary')
-        shell: Rscript {0}
+        run: make test
