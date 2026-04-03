@@ -23,4 +23,4 @@
 - [x] Unified `Makefile` with block-level comments and safe PDF generation
 - [x] Automated CI pipeline (`ci.yml`) for multi-verification
 - [x] PDF Reference Manual in `docs/reports/` (via `make doc`)
-- [x] Standard `DESCRIPTION` and `NAMESPACE` synchronization
+- [x] Standard `DESCRIPTION` and `NAMESPACE` synchronization (plus performance and documentation quality flags)

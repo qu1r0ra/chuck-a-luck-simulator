@@ -15,10 +15,11 @@
 
 ## Recent Tasks Completed (per SPECS.md)
 
-- [x] Create visualization of CI behavior (ribbon shrinkage) over growing sample size.
-- [x] Explicitly document/visualize MLE.
-- [x] Add mathematical derivation to architecture.md.
-- [x] Integrate PDF manual generation into 'make doc' with output to 'docs/reports/'.
+- Create visualization of CI behavior (ribbon shrinkage) over growing sample size.
+- Explicitly document/visualize MLE.
+- Add mathematical derivation to architecture.md.
+- Integrate PDF manual generation into 'make doc' with output to 'docs/reports/'.
+- Upgrade DESCRIPTION with R (>= 4.1.0) requirement, ByteCompile: true, and Roxygen Markdown support.
 
 ## Statistical Methodology
 
