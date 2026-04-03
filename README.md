@@ -47,7 +47,10 @@ A high-level overview of the repository organization:
 ├── .github/                # CI/CD Workflows (GitHub Actions)
 ├── docs/                   # Project documentation and reports
 │   ├── architecture.md     # Technical design and decisions
-│   └── reports/            # Generated documentation and manuals
+│   ├── math/               # Mathematical derivation notes
+│   ├── reports/            # Generated PDF manuals and analysis
+│   ├── sample/             # Reference code samples
+│   └── specs/              # Formal project specifications
 ├── dump/                   # Temporary samples and reference material
 ├── man/                    # Generated help documentation (.Rd files)
 ├── tests/                  # Unit testing suite
