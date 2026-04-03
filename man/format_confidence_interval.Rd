@@ -7,12 +7,12 @@
 format_confidence_interval(p_hat, moe)
 }
 \arguments{
-\item{p_hat}{[numeric] Sample proportion}
+\item{p_hat}{\link{numeric} Sample proportion}
 
-\item{moe}{[numeric] Margin of Error}
+\item{moe}{\link{numeric} Margin of Error}
 }
 \value{
-[character] Formatted interval string
+\link{character} Formatted interval string
 }
 \description{
 Format a confidence interval for display

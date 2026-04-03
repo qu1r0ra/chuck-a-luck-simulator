@@ -7,10 +7,10 @@
 calc_win_rate(sim_data)
 }
 \arguments{
-\item{sim_data}{[data.frame] Simulation data with 'NetWin' column}
+\item{sim_data}{\link{data.frame} Simulation data with 'NetWin' column}
 }
 \value{
-[numeric] The sample win rate
+\link{numeric} The sample win rate
 }
 \description{
 Calculate the actual sample win rate

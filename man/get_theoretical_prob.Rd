@@ -7,10 +7,10 @@
 get_theoretical_prob(matches)
 }
 \arguments{
-\item{matches}{[integer] The target number of matches (0-3)}
+\item{matches}{\link{integer} The target number of matches (0-3)}
 }
 \value{
-[numeric] The theoretical probability
+\link{numeric} The theoretical probability
 }
 \description{
 Get theoretical probability for a match count

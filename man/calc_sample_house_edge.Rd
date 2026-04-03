@@ -7,12 +7,12 @@
 calc_sample_house_edge(sim_data, wager_per_round)
 }
 \arguments{
-\item{sim_data}{[data.frame] Simulation data with 'NetWin' column}
+\item{sim_data}{\link{data.frame} Simulation data with 'NetWin' column}
 
-\item{wager_per_round}{[numeric] The amount bet per round}
+\item{wager_per_round}{\link{numeric} The amount bet per round}
 }
 \value{
-[numeric] The sample house edge
+\link{numeric} The sample house edge
 }
 \description{
 Calculate the actual sample house edge

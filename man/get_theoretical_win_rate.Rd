@@ -7,10 +7,10 @@
 get_theoretical_win_rate(payouts = DEFAULT_PAYOUT_MULTIPLIERS)
 }
 \arguments{
-\item{payouts}{[numeric vector] Named vector of payout multipliers}
+\item{payouts}{\link{numeric vector} Named vector of payout multipliers}
 }
 \value{
-[numeric] The theoretical win rate
+\link{numeric} The theoretical win rate
 }
 \description{
 Get the theoretical win rate

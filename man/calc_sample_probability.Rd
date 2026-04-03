@@ -7,12 +7,12 @@
 calc_sample_probability(sim_data, target_matches)
 }
 \arguments{
-\item{sim_data}{[data.frame] Simulation data with a 'Matches' column}
+\item{sim_data}{\link{data.frame} Simulation data with a 'Matches' column}
 
-\item{target_matches}{[integer] The match count to calculate probability for}
+\item{target_matches}{\link{integer} The match count to calculate probability for}
 }
 \value{
-[numeric] The sample probability
+\link{numeric} The sample probability
 }
 \description{
 Calculate sample probability for a target match count
