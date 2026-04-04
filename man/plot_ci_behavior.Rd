@@ -7,12 +7,12 @@
 plot_ci_behavior(sim_data, target_matches)
 }
 \arguments{
-\item{sim_data}{\link{data.frame} Simulation data}
+\item{sim_data}{data.frame Simulation data}
 
-\item{target_matches}{\link{integer} The match count}
+\item{target_matches}{integer The match count}
 }
 \value{
-\link[ggplot2:ggplot]{ggplot2::ggplot} Ribbon plot
+ggplot Ribbon plot
 }
 \description{
 Plot CI Behavior as sample size grows

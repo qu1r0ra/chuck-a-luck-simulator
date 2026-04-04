@@ -7,10 +7,10 @@
 format_ci_vector(ci)
 }
 \arguments{
-\item{ci}{\link{numeric vector} Lower and upper bounds}
+\item{ci}{numeric vector Lower and upper bounds}
 }
 \value{
-\link{character} Formatted interval string
+character Formatted interval string
 }
 \description{
 Format a confidence interval for display from a vector

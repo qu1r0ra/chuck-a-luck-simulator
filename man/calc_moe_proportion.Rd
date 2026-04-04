@@ -7,15 +7,16 @@
 calc_moe_proportion(p_hat, n, conf_level = 0.95)
 }
 \arguments{
-\item{p_hat}{\link{numeric} Sample proportion}
+\item{p_hat}{numeric Sample proportion}
 
-\item{n}{\link{integer} Sample size}
+\item{n}{integer Sample size}
 
-\item{conf_level}{\link{numeric} Confidence level (e.g., 0.95)}
+\item{conf_level}{numeric Confidence level (e.g., 0.95)}
 }
 \value{
-\link{numeric} The margin of error
+numeric The margin of error
 }
 \description{
-Calculate Margin of Error for a proportion
+The standard margin of error for a binomial proportion is calculated as:
+\deqn{MoE = z \cdot \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}}
 }

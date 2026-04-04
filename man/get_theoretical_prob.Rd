@@ -7,11 +7,12 @@
 get_theoretical_prob(matches)
 }
 \arguments{
-\item{matches}{\link{integer} The target number of matches (0-3)}
+\item{matches}{integer The target number of matches (0-3)}
 }
 \value{
-\link{numeric} The theoretical probability
+numeric The theoretical probability
 }
 \description{
-Get theoretical probability for a match count
+Calculated using the Binomial distribution \eqn{B(3, 1/6)}:
+\deqn{P(X=x) = \binom{3}{x} p^x (1-p)^{3-x}}
 }

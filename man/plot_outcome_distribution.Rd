@@ -7,10 +7,10 @@
 plot_outcome_distribution(sim_data)
 }
 \arguments{
-\item{sim_data}{\link{data.frame} Simulation data}
+\item{sim_data}{data.frame Simulation data}
 }
 \value{
-\link[ggplot2:ggplot]{ggplot2::ggplot} Distribution bar plot
+ggplot Distribution bar plot
 }
 \description{
 Plot the outcome frequency distribution

@@ -15,11 +15,11 @@
 
 ## Recent Tasks Completed (per SPECS.md)
 
-- Create visualization of CI behavior (ribbon shrinkage) over growing sample size.
-- Explicitly document/visualize MLE.
-- Add mathematical derivation to architecture.md.
-- Integrate PDF manual generation into 'make doc' with output to 'docs/reports/'.
 - Upgrade DESCRIPTION with R (>= 4.1.0) requirement, ByteCompile: true, and Roxygen Markdown support.
+- Fully document theoretical parameters (Expected Value, House Edge) with exact summation formulas.
+- Delineate reactive logic dependency graph in `architecture.md`.
+- Extract "Historical Distribution" logic into dedicated `get_sample_distribution` function in `statistics.R`.
+- Standardize `.gitignore` and `Makefile` for clean, professional PDF builds (removed build junk).
 
 ## Statistical Methodology
 
@@ -30,5 +30,6 @@
 
 ## Performance
 
-- **Visual Analysis**: All plots (LLN Trace, CI Comparison, CI Behavior) utilize the **full simulation dataset** for maximum precision.
-- **DataTable Capping**: The "Detailed Round Log" table is capped at the **last 1,000 rounds** to maintain browser performance during large data rendering.
+- **Visual Analysis**: All plots utilize the **full simulation dataset** for maximum precision.
+- **DataTable Capping**: The "Detailed Round Log" table is capped at the **last 1,000 rounds** to maintain browser performance.
+- **Reactive Efficiency**: Parameters like `target_outcome` trigger specific re-renders without re-simulating the entire dataset.

@@ -2,9 +2,9 @@ library(ggplot2)
 library(dplyr)
 
 #' Plot Law of Large Numbers convergence
-#' @param sim_data [data.frame] Simulation data
-#' @param target_matches [integer] The match count to visualize
-#' @return [ggplot] Convergence plot
+#' @param sim_data data.frame Simulation data
+#' @param target_matches integer The match count to visualize
+#' @return ggplot Convergence plot
 #' @export
 plot_lln_convergence <- function(sim_data, target_matches) {
   if (nrow(sim_data) == 0) {
@@ -42,8 +42,8 @@ plot_lln_convergence <- function(sim_data, target_matches) {
 }
 
 #' Plot the outcome frequency distribution
-#' @param sim_data [data.frame] Simulation data
-#' @return [ggplot] Distribution bar plot
+#' @param sim_data data.frame Simulation data
+#' @return ggplot Distribution bar plot
 #' @export
 plot_outcome_distribution <- function(sim_data) {
   if (nrow(sim_data) == 0) {
@@ -51,15 +51,16 @@ plot_outcome_distribution <- function(sim_data) {
       theme_void() +
       annotate("text", x = 0.5, y = 0.5, label = "No data yet. Run simulations!")
   } else {
-    dist_probs <- data.frame(
+    sample_dist <- get_sample_distribution(sim_data)
+    theoretical_dist <- data.frame(
       Matches = 0:3,
       Theoretical = unname(CHUCK_A_LUCK_PROBS[as.character(0:3)])
     )
 
-    ggplot(sim_data, aes(x = factor(Matches, levels = 0:3))) +
-      geom_bar(aes(y = after_stat(count / sum(count)), fill = "Sample Data"), alpha = 0.8) +
+    ggplot(sample_dist, aes(x = factor(Matches, levels = 0:3))) +
+      geom_bar(aes(y = Frequency, fill = "Sample Data"), stat = "identity", alpha = 0.8) +
       geom_point(
-        data = dist_probs, aes(x = factor(Matches), y = Theoretical, color = "Theoretical"),
+        data = theoretical_dist, aes(x = factor(Matches), y = Theoretical, color = "Theoretical"),
         size = 4
       ) +
       scale_fill_manual(name = "", values = c("Sample Data" = "#0dcaf0")) +
@@ -79,10 +80,10 @@ plot_outcome_distribution <- function(sim_data) {
 }
 
 #' Plot Comparison of Confidence Intervals
-#' @param p_hat [numeric] Sample proportion
-#' @param n [integer] Sample size
-#' @param conf_level [numeric] Confidence level
-#' @return [ggplot] Error bar plot
+#' @param p_hat numeric Sample proportion
+#' @param n integer Sample size
+#' @param conf_level numeric Confidence level
+#' @return ggplot Error bar plot
 #' @export
 plot_ci_comparison <- function(p_hat, n, conf_level = 0.95) {
   if (n == 0) {
@@ -119,9 +120,9 @@ plot_ci_comparison <- function(p_hat, n, conf_level = 0.95) {
 }
 
 #' Plot CI Behavior as sample size grows
-#' @param sim_data [data.frame] Simulation data
-#' @param target_matches [integer] The match count
-#' @return [ggplot] Ribbon plot
+#' @param sim_data data.frame Simulation data
+#' @param target_matches integer The match count
+#' @return ggplot Ribbon plot
 #' @export
 plot_ci_behavior <- function(sim_data, target_matches) {
   if (nrow(sim_data) == 0) {
