@@ -50,3 +50,6 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# R documentation temporary build folders
+.Rd2pdf*/
