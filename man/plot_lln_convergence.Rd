@@ -7,12 +7,12 @@
 plot_lln_convergence(sim_data, target_matches)
 }
 \arguments{
-\item{sim_data}{\link{data.frame} Simulation data}
+\item{sim_data}{data.frame Simulation data}
 
-\item{target_matches}{\link{integer} The match count to visualize}
+\item{target_matches}{integer The match count to visualize}
 }
 \value{
-\link[ggplot2:ggplot]{ggplot2::ggplot} Convergence plot
+ggplot Convergence plot
 }
 \description{
 Plot Law of Large Numbers convergence

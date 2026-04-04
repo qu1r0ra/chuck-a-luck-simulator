@@ -12,16 +12,16 @@ simulate_chuck_a_luck(
 )
 }
 \arguments{
-\item{n_rounds}{\link{integer} Number of rounds to simulate}
+\item{n_rounds}{integer Number of rounds to simulate}
 
-\item{bet_number}{\link{integer} The number bet on (1-6)}
+\item{bet_number}{integer The number bet on (1-6)}
 
-\item{wager}{\link{numeric} The amount wagered per round}
+\item{wager}{numeric The amount wagered per round}
 
-\item{payouts}{\link{numeric vector} Named vector of payout multipliers}
+\item{payouts}{numeric vector Named vector of payout multipliers}
 }
 \value{
-\link{data.frame} Contains Round, Die1-3, Matches, and NetWin
+data.frame Contains Round, Die1-3, Matches, and NetWin
 }
 \description{
 Simulate a single round or multiple rounds of Chuck-a-Luck

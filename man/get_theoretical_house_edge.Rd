@@ -7,11 +7,12 @@
 get_theoretical_house_edge(payouts = DEFAULT_PAYOUT_MULTIPLIERS)
 }
 \arguments{
-\item{payouts}{\link{numeric vector} Named vector of payout multipliers}
+\item{payouts}{numeric vector Named vector of payout multipliers}
 }
 \value{
-\link{numeric} The theoretical house edge
+numeric The theoretical house edge
 }
 \description{
-Get the theoretical house edge
+The house edge is the negative of the Expected Value of a \$1 wager:
+\deqn{House Edge = -\sum_{x=0}^{3} P(X=x) \cdot \text{Payout}_x}
 }

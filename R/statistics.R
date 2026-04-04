@@ -1,6 +1,10 @@
 #' Get theoretical probability for a match count
-#' @param matches [integer] The target number of matches (0-3)
-#' @return [numeric] The theoretical probability
+#'
+#' Calculated using the Binomial distribution \eqn{B(3, 1/6)}:
+#' \deqn{P(X=x) = \binom{3}{x} p^x (1-p)^{3-x}}
+#'
+#' @param matches integer The target number of matches (0-3)
+#' @return numeric The theoretical probability
 #' @export
 get_theoretical_prob <- function(matches) {
   prob <- CHUCK_A_LUCK_PROBS[as.character(matches)]
@@ -12,8 +16,12 @@ get_theoretical_prob <- function(matches) {
 }
 
 #' Get the theoretical win rate
-#' @param payouts [numeric vector] Named vector of payout multipliers
-#' @return [numeric] The theoretical win rate
+#'
+#' The probability of rolling at least one match \eqn{X \ge 1}:
+#' \deqn{P(X \geq 1) = \sum_{x=1}^{3} P(X=x)}
+#'
+#' @param payouts numeric vector Named vector of payout multipliers
+#' @return numeric The theoretical win rate
 #' @export
 get_theoretical_win_rate <- function(payouts = DEFAULT_PAYOUT_MULTIPLIERS) {
   winning_matches <- names(payouts[payouts > 0])
@@ -22,8 +30,12 @@ get_theoretical_win_rate <- function(payouts = DEFAULT_PAYOUT_MULTIPLIERS) {
 }
 
 #' Get the theoretical house edge
-#' @param payouts [numeric vector] Named vector of payout multipliers
-#' @return [numeric] The theoretical house edge
+#'
+#' The house edge is the negative of the Expected Value of a \$1 wager:
+#' \deqn{House Edge = -\sum_{x=0}^{3} P(X=x) \cdot \text{Payout}_x}
+#'
+#' @param payouts numeric vector Named vector of payout multipliers
+#' @return numeric The theoretical house edge
 #' @export
 get_theoretical_house_edge <- function(payouts = DEFAULT_PAYOUT_MULTIPLIERS) {
   expected_value <- sum(payouts[names(CHUCK_A_LUCK_PROBS)] * CHUCK_A_LUCK_PROBS)
@@ -31,9 +43,9 @@ get_theoretical_house_edge <- function(payouts = DEFAULT_PAYOUT_MULTIPLIERS) {
 }
 
 #' Calculate sample probability for a target match count
-#' @param sim_data [data.frame] Simulation data with a 'Matches' column
-#' @param target_matches [integer] The match count to calculate probability for
-#' @return [numeric] The sample probability
+#' @param sim_data data.frame Simulation data with a 'Matches' column
+#' @param target_matches integer The match count to calculate probability for
+#' @return numeric The sample probability
 #' @export
 calc_sample_probability <- function(sim_data, target_matches) {
   if (nrow(sim_data) == 0) {
@@ -44,8 +56,8 @@ calc_sample_probability <- function(sim_data, target_matches) {
 }
 
 #' Calculate the actual sample win rate
-#' @param sim_data [data.frame] Simulation data with 'NetWin' column
-#' @return [numeric] The sample win rate
+#' @param sim_data data.frame Simulation data with 'NetWin' column
+#' @return numeric The sample win rate
 #' @export
 calc_win_rate <- function(sim_data) {
   if (nrow(sim_data) == 0) {
@@ -56,9 +68,9 @@ calc_win_rate <- function(sim_data) {
 }
 
 #' Calculate the actual sample house edge
-#' @param sim_data [data.frame] Simulation data with 'NetWin' column
-#' @param wager_per_round [numeric] The amount bet per round
-#' @return [numeric] The sample house edge
+#' @param sim_data data.frame Simulation data with 'NetWin' column
+#' @param wager_per_round numeric The amount bet per round
+#' @return numeric The sample house edge
 #' @export
 calc_sample_house_edge <- function(sim_data, wager_per_round) {
   if (nrow(sim_data) == 0 || wager_per_round == 0) {
@@ -70,11 +82,31 @@ calc_sample_house_edge <- function(sim_data, wager_per_round) {
   }
 }
 
+#' Calculate the distribution of outcomes from simulation data
+#' @param sim_data data.frame Simulation data with 'Matches' column
+#' @return data.frame Relative frequency distribution
+#' @export
+get_sample_distribution <- function(sim_data) {
+  if (nrow(sim_data) == 0) {
+    return(data.frame(Matches = 0:3, Frequency = rep(0, 4)))
+  }
+
+  counts <- table(factor(sim_data$Matches, levels = 0:3))
+  data.frame(
+    Matches = 0:3,
+    Frequency = as.numeric(counts) / nrow(sim_data)
+  )
+}
+
 #' Calculate Margin of Error for a proportion
-#' @param p_hat [numeric] Sample proportion
-#' @param n [integer] Sample size
-#' @param conf_level [numeric] Confidence level (e.g., 0.95)
-#' @return [numeric] The margin of error
+#'
+#' The standard margin of error for a binomial proportion is calculated as:
+#' \deqn{MoE = z \cdot \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}}
+#'
+#' @param p_hat numeric Sample proportion
+#' @param n integer Sample size
+#' @param conf_level numeric Confidence level (e.g., 0.95)
+#' @return numeric The margin of error
 #' @export
 calc_moe_proportion <- function(p_hat, n, conf_level = 0.95) {
   if (n == 0) {
@@ -86,10 +118,16 @@ calc_moe_proportion <- function(p_hat, n, conf_level = 0.95) {
 }
 
 #' Calculate Wilson Score Interval
-#' @param p_hat [numeric] Sample proportion
-#' @param n [integer] Sample size
-#' @param conf_level [numeric] Confidence level (default 0.95)
-#' @return [numeric vector] Lower and upper bounds
+#'
+#' The Wilson score interval provides better coverage than the Wald interval,
+#' especially for small \code{n} or extreme probabilities. It is calculated as:
+#' \deqn{\frac{\hat{p} + \frac{z^2}{2n} \pm z \cdot \sqrt{\frac{\hat{p}(1-\hat{p})}{n} +
+#' \frac{z^2}{4n^2}}}{1 + \frac{z^2}{n}}}
+#'
+#' @param p_hat numeric Sample proportion
+#' @param n integer Sample size
+#' @param conf_level numeric Confidence level (default 0.95)
+#' @return numeric vector Lower and upper bounds
 #' @export
 calc_wilson_ci <- function(p_hat, n, conf_level = 0.95) {
   if (n == 0) {
@@ -108,10 +146,16 @@ calc_wilson_ci <- function(p_hat, n, conf_level = 0.95) {
 }
 
 #' Calculate Agresti-Coull Confidence Interval
-#' @param p_hat [numeric] Sample proportion
-#' @param n [integer] Sample size
-#' @param conf_level [numeric] Confidence level (default 0.95)
-#' @return [numeric vector] Lower and upper bounds
+#'
+#' Known as the "plus-four" interval, it adds pseudo-counts to improve centering:
+#' \deqn{\tilde{n} = n + z^2}
+#' \deqn{\tilde{p} = \frac{X + \frac{z^2}{2}}{\tilde{n}}}
+#' \deqn{\tilde{p} \pm z \sqrt{\frac{\tilde{p}(1-\tilde{p})}{\tilde{n}}}}
+#'
+#' @param p_hat numeric Sample proportion
+#' @param n integer Sample size
+#' @param conf_level numeric Confidence level (default 0.95)
+#' @return numeric vector Lower and upper bounds
 #' @export
 calc_agresti_coull_ci <- function(p_hat, n, conf_level = 0.95) {
   if (n == 0) {
@@ -128,10 +172,14 @@ calc_agresti_coull_ci <- function(p_hat, n, conf_level = 0.95) {
 }
 
 #' Calculate Wald (Normal) Confidence Interval
-#' @param p_hat [numeric] Sample proportion
-#' @param n [integer] Sample size
-#' @param conf_level [numeric] Confidence level (default 0.95)
-#' @return [numeric vector] Lower and upper bounds
+#'
+#' The standard normal approximation for a binomial proportion:
+#' \deqn{\hat{p} \pm z \cdot \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}}
+#'
+#' @param p_hat numeric Sample proportion
+#' @param n integer Sample size
+#' @param conf_level numeric Confidence level (default 0.95)
+#' @return numeric vector Lower and upper bounds
 #' @export
 calc_wald_ci <- function(p_hat, n, conf_level = 0.95) {
   if (n == 0) {
@@ -143,17 +191,17 @@ calc_wald_ci <- function(p_hat, n, conf_level = 0.95) {
 }
 
 #' Format a confidence interval for display from a vector
-#' @param ci [numeric vector] Lower and upper bounds
-#' @return [character] Formatted interval string
+#' @param ci numeric vector Lower and upper bounds
+#' @return character Formatted interval string
 #' @export
 format_ci_vector <- function(ci) {
   sprintf("[%s, %s]", format(round(ci[1], 4), nsmall = 4), format(round(ci[2], 4), nsmall = 4))
 }
 
 #' Format a confidence interval for display
-#' @param p_hat [numeric] Sample proportion
-#' @param moe [numeric] Margin of Error
-#' @return [character] Formatted interval string
+#' @param p_hat numeric Sample proportion
+#' @param moe numeric Margin of Error
+#' @return character Formatted interval string
 #' @export
 format_confidence_interval <- function(p_hat, moe) {
   lower <- max(0, p_hat - moe)

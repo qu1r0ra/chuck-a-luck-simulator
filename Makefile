@@ -1,4 +1,4 @@
-.PHONY: all run install format lint test doc check clean
+.PHONY: all run install format lint test doc check
 
 # Default entry point
 all: run
@@ -28,6 +28,8 @@ test:
 # Process roxygen2 tags and build the PDF manual in docs/reports/
 doc:
 	Rscript -e "roxygen2::roxygenize()"
+	mkdir -p docs/reports
+	R CMD Rd2pdf . --output=docs/reports/manual.pdf --force
 
 # Run the complete verification lifecycle (format, lint, test, doc)
 check: format lint test doc

@@ -7,15 +7,18 @@
 calc_agresti_coull_ci(p_hat, n, conf_level = 0.95)
 }
 \arguments{
-\item{p_hat}{\link{numeric} Sample proportion}
+\item{p_hat}{numeric Sample proportion}
 
-\item{n}{\link{integer} Sample size}
+\item{n}{integer Sample size}
 
-\item{conf_level}{\link{numeric} Confidence level (default 0.95)}
+\item{conf_level}{numeric Confidence level (default 0.95)}
 }
 \value{
-\link{numeric vector} Lower and upper bounds
+numeric vector Lower and upper bounds
 }
 \description{
-Calculate Agresti-Coull Confidence Interval
+Known as the "plus-four" interval, it adds pseudo-counts to improve centering:
+\deqn{\tilde{n} = n + z^2}
+\deqn{\tilde{p} = \frac{X + \frac{z^2}{2}}{\tilde{n}}}
+\deqn{\tilde{p} \pm z \sqrt{\frac{\tilde{p}(1-\tilde{p})}{\tilde{n}}}}
 }

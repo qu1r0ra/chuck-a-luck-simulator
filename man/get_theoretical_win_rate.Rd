@@ -7,11 +7,12 @@
 get_theoretical_win_rate(payouts = DEFAULT_PAYOUT_MULTIPLIERS)
 }
 \arguments{
-\item{payouts}{\link{numeric vector} Named vector of payout multipliers}
+\item{payouts}{numeric vector Named vector of payout multipliers}
 }
 \value{
-\link{numeric} The theoretical win rate
+numeric The theoretical win rate
 }
 \description{
-Get the theoretical win rate
+The probability of rolling at least one match \eqn{X \ge 1}:
+\deqn{P(X \geq 1) = \sum_{x=1}^{3} P(X=x)}
 }

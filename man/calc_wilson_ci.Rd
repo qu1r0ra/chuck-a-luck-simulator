@@ -7,15 +7,18 @@
 calc_wilson_ci(p_hat, n, conf_level = 0.95)
 }
 \arguments{
-\item{p_hat}{\link{numeric} Sample proportion}
+\item{p_hat}{numeric Sample proportion}
 
-\item{n}{\link{integer} Sample size}
+\item{n}{integer Sample size}
 
-\item{conf_level}{\link{numeric} Confidence level (default 0.95)}
+\item{conf_level}{numeric Confidence level (default 0.95)}
 }
 \value{
-\link{numeric vector} Lower and upper bounds
+numeric vector Lower and upper bounds
 }
 \description{
-Calculate Wilson Score Interval
+The Wilson score interval provides better coverage than the Wald interval,
+especially for small \code{n} or extreme probabilities. It is calculated as:
+\deqn{\frac{\hat{p} + \frac{z^2}{2n} \pm z \cdot \sqrt{\frac{\hat{p}(1-\hat{p})}{n} +
+\frac{z^2}{4n^2}}}{1 + \frac{z^2}{n}}}
 }
