@@ -83,3 +83,10 @@ test_that("CI methods converge at large n", {
   expect_equal(wilson[1], agresti[1], tolerance = 1e-3)
   expect_equal(wald[2], agresti[2], tolerance = 1e-3)
 })
+
+test_that("Wald interval can yield negative values (unclipped)", {
+  n <- 100
+  p <- 0.01  # 1 success
+  ci <- calc_wald_ci(p, n, 0.95)
+  expect_lt(ci[1], 0)
+})

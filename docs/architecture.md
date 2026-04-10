@@ -102,7 +102,7 @@ where $X$ is the count of successful outcomes and $n$ is the total number of rou
 
 To quantify the uncertainty of the MLE estimate, the application provides a comparison of three distinct frequentist intervals. The **confidence level $\alpha$ is user-adjustable** via the sidebar (defaulting to 95%), which dynamically updates the critical value $z$ used in the following derivations:
 
-- **Wald (Normal) Interval:** The standard approximation based on the Normal distribution. While computationally simple, it can produce "impossible" values (outside [0, 1]) and fails for small $n$ or extreme probabilities.
+- **Wald (Normal) Interval:** The standard approximation based on the Normal distribution. While computationally simple, it can produce "impossible" values (outside [0, 1]) for small $n$ or extreme probabilities. The simulator intentionally leaves these unclipped to demonstrate this analytical failure.
   - **Formula**: $\hat{p} \pm z \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}$
 - **Wilson Score Interval:** A more robust method that centers the interval correctly and provides better coverage for rare events. It is the preferred method for this simulator due to the low probability of rolling 3 matches ($1/216$).
   - **Formula**: $\frac{\hat{p} + \frac{z^2}{2n} \pm z \sqrt{\frac{\hat{p}(1-\hat{p})}{n} + \frac{z^2}{4n^2}}}{1 + \frac{z^2}{n}}$

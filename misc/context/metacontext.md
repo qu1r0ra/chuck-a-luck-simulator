@@ -26,7 +26,7 @@
 
 ## Statistical Methodology
 
-- **Wald**: $\hat{p} \pm z\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}$
+- **Wald**: $\hat{p} \pm z\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}$ (Intentionally unclipped to demonstrate limits $<0$).
 - **Agresti-Coull**: Plus-four adjustment for 95% CI.
 - **Wilson**: Efficient for rare events like rolling 3 matches ($1/216$).
 - **Theoretical Probabilities**: Calculated using Binomial Distribution $B(3, 1/6)$.

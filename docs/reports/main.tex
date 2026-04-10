@@ -123,21 +123,16 @@ To quantify uncertainty for the estimate $\hat{p}$, we implement Wald, Wilson Sc
 \text{Agresti-Coull:} \quad \tilde{n} = n + z^2, \quad \tilde{p} = \frac{X + z^2/2}{\tilde{n}}, \quad \tilde{p} \pm z \sqrt{\frac{\tilde{p}(1-\tilde{p})}{\tilde{n}}}
 \end{equation}
 
-\begin{figure}[h]
-    \centering
-    %\includegraphics[width=0.8\textwidth]{ci_comparison.png}
-    \caption{Side-by-side comparison of intervals for the rare 3-match outcome.}
-    \label{fig:ci_comparison}
-\end{figure}
+Figure \ref{fig:ci_suite} presents an integrated view of these three methodologies as implemented in the simulator's analysis dashboard.
 
 \begin{figure}[h]
     \centering
-    %\includegraphics[width=0.8\textwidth]{ci_behavior.png}
-    \caption{Behavior of confidence intervals over increasing trial counts $n$, demonstrating the $1/\sqrt{n}$ shrinkage of interval widths and the convergence of methodologies.}
-    \label{fig:ci_behavior}
+    %\includegraphics[width=0.9\textwidth]{ci_analysis_suite.png}
+    \caption{Integrated Confidence Analysis dashboard, showcasing interval methodologies, numerical summaries, and $1/\sqrt{n}$ width shrinkage behavior.}
+    \label{fig:ci_suite}
 \end{figure}
 
-Analytical results show that at small sample sizes, the Wald interval occasionally yields limits below 0, whereas the Wilson Score and Agresti-Coull methods remain robust. At large $n$, all three methods converge as the normal approximation becomes accurate.
+Analytical results demonstrate that for rare outcomes at small sample sizes, the Wald interval often yields invalid limits below 0, whereas the Wilson Score and Agresti-Coull methods remain naturally bounded. As $n$ increases, all three methodologies converge as the binomial distribution approaches normality.
 
 \section{AI Integration and Citation}
 The development of this project was facilitated by the Antigravity (Gemini) AI assistant. AI was utilized specifically for:
