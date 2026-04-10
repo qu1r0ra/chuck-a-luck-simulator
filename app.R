@@ -109,13 +109,11 @@ ui <- page_navbar(
       card(
         card_header("Frequentist Estimates for Chosen Outcome"),
         p(strong("Target Outcome: "), textOutput("target_outcome_text", inline = TRUE)),
-        tags$ul(
-          tags$li(strong("MLE (Sample Probability): "), textOutput("sample_prob_out", inline = TRUE)),
-          tags$li(strong("Theoretical Probability: "), textOutput("theo_prob_out", inline = TRUE)),
-          tags$li(strong("Wald 95% CI: "), textOutput("ci_out", inline = TRUE)),
-          tags$li(strong("Wilson Score 95% CI: "), textOutput("wilson_ci_out", inline = TRUE)),
-          tags$li(strong("Agresti-Coull 95% CI: "), textOutput("agresti_ci_out", inline = TRUE))
-        )
+        p(strong("MLE (Sample Probability): "), textOutput("sample_prob_out", inline = TRUE)),
+        p(strong("Theoretical Probability: "), textOutput("theo_prob_out", inline = TRUE)),
+        p(strong("Wald 95% CI: "), textOutput("ci_out", inline = TRUE)),
+        p(strong("Wilson Score 95% CI: "), textOutput("wilson_ci_out", inline = TRUE)),
+        p(strong("Agresti-Coull 95% CI: "), textOutput("agresti_ci_out", inline = TRUE))
       )
     )
   ),
