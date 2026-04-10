@@ -30,6 +30,7 @@ ui <- page_navbar(
       ),
       selected = 2
     ),
+    sliderInput("conf_level", "Confidence Level:", min = 0.80, max = 0.99, value = 0.95, step = 0.01),
     helpText(
       "Select whether you want to focus the specific convergence graphs and statistics on rolling ",
       "exactly 2 matches or 3 matches."
@@ -297,7 +298,7 @@ server <- function(input, output, session) {
       "0.0000"
     } else {
       p_hat <- calc_sample_probability(sim_state(), as.numeric(input$target_outcome))
-      moe <- calc_moe_proportion(p_hat, n)
+      moe <- calc_moe_proportion(p_hat, n, input$conf_level)
       sprintf("%.4f", moe)
     }
   })
@@ -309,18 +310,18 @@ server <- function(input, output, session) {
       return("[0.0000, 0.0000]")
     }
     p_hat <- calc_sample_probability(dat, as.numeric(input$target_outcome))
-    format_ci_vector(calc_wald_ci(p_hat, n))
+    format_ci_vector(calc_wald_ci(p_hat, n, input$conf_level))
   })
 
   output$plot_ci_comp <- renderPlot({
     dat <- sim_state()
     n <- nrow(dat)
     p_hat <- if (n > 0) calc_sample_probability(dat, as.numeric(input$target_outcome)) else 0
-    plot_ci_comparison(p_hat, n)
+    plot_ci_comparison(p_hat, n, input$conf_level)
   })
 
   output$plot_ci_grow <- renderPlot({
-    plot_ci_behavior(sim_state(), as.numeric(input$target_outcome))
+    plot_ci_behavior(sim_state(), as.numeric(input$target_outcome), input$conf_level)
   })
 
   output$ci_metrics_table <- renderTable(
@@ -334,9 +335,9 @@ server <- function(input, output, session) {
       p_hat <- calc_sample_probability(dat, as.numeric(input$target_outcome))
       theo <- get_theoretical_prob(as.numeric(input$target_outcome))
 
-      wald <- calc_wald_ci(p_hat, n)
-      wilson <- calc_wilson_ci(p_hat, n)
-      agresti <- calc_agresti_coull_ci(p_hat, n)
+      wald <- calc_wald_ci(p_hat, n, input$conf_level)
+      wilson <- calc_wilson_ci(p_hat, n, input$conf_level)
+      agresti <- calc_agresti_coull_ci(p_hat, n, input$conf_level)
 
       data.frame(
         Metric = c(
