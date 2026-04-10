@@ -157,6 +157,10 @@ ui <- page_navbar(
 )
 
 server <- function(input, output, session) {
+  # ---------------------------------------------------------------------------
+  # 1. REACTIVE STATE PERSISTENCE
+  # ---------------------------------------------------------------------------
+  # Initialize the primary reactive containers for simulation data and bankroll.
   sim_state <- reactiveVal(data.table())
   bankroll <- reactiveVal(1000)
 
@@ -175,6 +179,10 @@ server <- function(input, output, session) {
     )
   })
 
+  # ---------------------------------------------------------------------------
+  # 2. SIMULATION TRIGGER & VECTORIZED LOGIC
+  # ---------------------------------------------------------------------------
+  # Observe simulation button click and execute vectorized trial generation.
   observeEvent(input$sim_btn, {
     new_sims <- simulate_chuck_a_luck(
       input$sim_rounds,
@@ -196,32 +204,15 @@ server <- function(input, output, session) {
     bankroll(bankroll() + sum(new_sims$NetWin))
   })
 
-  output$wilson_ci_out <- renderText({
-    dat <- sim_state()
-    n <- nrow(dat)
-    if (n == 0) {
-      return("[0.0000, 0.0000]")
-    }
-    tgt <- as.numeric(input$target_outcome)
-    p_hat <- calc_sample_probability(dat, tgt)
-    format_ci_vector(calc_wilson_ci(p_hat, n))
-  })
-
-  output$agresti_ci_out <- renderText({
-    dat <- sim_state()
-    n <- nrow(dat)
-    if (n == 0) {
-      return("[0.0000, 0.0000]")
-    }
-    tgt <- as.numeric(input$target_outcome)
-    p_hat <- calc_sample_probability(dat, tgt)
-    format_ci_vector(calc_agresti_coull_ci(p_hat, n))
-  })
-
   observeEvent(input$reset_btn, {
     sim_state(data.table())
     bankroll(input$initial_bankroll)
   })
+
+  # ---------------------------------------------------------------------------
+  # 3. OUTPUT RENDERING & REACTIVE UPDATES
+  # ---------------------------------------------------------------------------
+  # Re-render every metric and visualization whenever 'sim_state' changes.
 
   output$bankroll_out <- renderText({
     sprintf("$%s", format(bankroll(), big.mark = ","))
@@ -309,6 +300,28 @@ server <- function(input, output, session) {
     }
     p_hat <- calc_sample_probability(dat, as.numeric(input$target_outcome))
     format_ci_vector(calc_wald_ci(p_hat, n, input$conf_level))
+  })
+
+  output$wilson_ci_out <- renderText({
+    dat <- sim_state()
+    n <- nrow(dat)
+    if (n == 0) {
+      return("[0.0000, 0.0000]")
+    }
+    tgt <- as.numeric(input$target_outcome)
+    p_hat <- calc_sample_probability(dat, tgt)
+    format_ci_vector(calc_wilson_ci(p_hat, n))
+  })
+
+  output$agresti_ci_out <- renderText({
+    dat <- sim_state()
+    n <- nrow(dat)
+    if (n == 0) {
+      return("[0.0000, 0.0000]")
+    }
+    tgt <- as.numeric(input$target_outcome)
+    p_hat <- calc_sample_probability(dat, tgt)
+    format_ci_vector(calc_agresti_coull_ci(p_hat, n))
   })
 
   output$plot_ci_comp <- renderPlot({

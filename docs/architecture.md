@@ -45,7 +45,15 @@ To support simulations of up to millions of rounds without UI lag, the project l
 - **Reactive State**: The main simulation history is stored as a `data.table` within a Shiny `reactiveVal`.
 - **UI Performance**: To ensure smooth browser interaction with large simulations, the front-end round log is capped at the last 1,000 observations while allowing plots to remain fully granular.
 
-### 2. Statistical Robustness (Wilson Score Interval)
+## 2. Reactive Logic Delineation
+
+The application utilizes a multi-layered reactive architecture inside the `server` function to ensure optimal performance and state persistence:
+
+1. **State Storage (`reactiveVal`)**: The primary simulation dataset is stored in `sim_state`. This allows results to be accumulated across multiple clicks of the "Simulate" button, enabling long-run statistical observation without refreshing the app.
+2. **Simulation Triggers (`observeEvent`)**: The core calculation logic is isolated within an observer that listens for the `sim_btn`. When triggered, it calls the `simulate_chuck_a_luck` function, which performs hundreds of thousands of trials in a single vectorized operation before appending them to the central state.
+3. **Output Rendering (`render*` functions)**: All metrics (House Edge, LLN plots, CI Analysis) are bound to the `sim_state`. This means that as soon as a new batch of trials is appended to the state, the entire dashboard updates automatically via R's reactive graph.
+
+## 3. Statistical Robustness
 
 We prioritize mathematical accuracy over simple approximations.
 
