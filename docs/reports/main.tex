@@ -46,7 +46,7 @@ Chuck-a-Luck, also known as Bird Cage, is a game where players bet on a number f
 \section{Theoretical Foundations}
 Chuck-a-Luck is a binomial experiment where a player bets on a number $b \in \{1, 2, ..., 6\}$. Three fair dice are rolled, and the number of matches $X$ follows a Binomial distribution $B(3, 1/6)$. The sample space contains 216 combinations, summarized in Table \ref{tab:outcomes}.
 
-\begin{table}[h]
+\begin{table}[!htbp]
     \centering
     \caption{Chuck-a-Luck Theoretical Outcome Distribution}
     \begin{tabular}{lll}
@@ -79,16 +79,16 @@ The simulator is implemented using the R programming language \cite{rproject} an
 To support large-scale simulations, we utilize a vectorized backend. Successes for each trial are calculated using row-weighted sums: \texttt{Matches <- rowSums(dice == target)}. This optimization enables sub-second execution even for millions of trials. Additionally, simulation state is persisted across multiple runs using \texttt{reactiveValues}, allowing users to cumulatively build a large dataset without reloading the session.
 
 \subsection{User Interface Design}
-The application interface is designed to illustrate both the simulation setup and the subsequent analysis phases. Figure 1 and 2 highlight the transition from a clean initial state to a populated dashboard.
+The application interface is designed to illustrate both the simulation setup and the subsequent analysis phases. Figure~\ref{fig:ui_initial} and~\ref{fig:ui_populated} highlight the transition from a clean initial state to a populated dashboard.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=1.0\textwidth]{ui_initial.png}
     \caption{The Chuck-a-Luck Simulator initial setup view.}
     \label{fig:ui_initial}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=1.0\textwidth]{ui_populated.png}
     \caption{The Simulator interface after $n=10,000$ trials, showing populated metrics and visualizations.}
@@ -99,9 +99,9 @@ The application interface is designed to illustrate both the simulation setup an
 We utilize the simulation engine to demonstrate frequentist convergence and quantify estimator uncertainty.
 
 \subsection{Law of Large Numbers and Convergence}
-As $n \to \infty$, the MLE estimate $\hat{p}$ converges to its theoretical counterpart \cite{taboga2021}. Figure \ref{fig:lln} demonstrates this stabilization across increasing trial counts.
+As $n \to \infty$, the MLE estimate $\hat{p}$ converges to its theoretical counterpart \cite{taboga2021}. Figure~\ref{fig:lln} demonstrates this stabilization across increasing trial counts.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=1.0\textwidth]{lln_trace.png}
     \caption{Convergence Trace Plot demonstrating the Law of Large Numbers as the sample proportion stabilizes around $p=1/6$.}
@@ -123,9 +123,9 @@ To quantify uncertainty for the estimate $\hat{p}$, we implement Wald, Wilson Sc
 \text{Agresti-Coull:} \quad \tilde{n} = n + z^2, \quad \tilde{p} = \frac{X + z^2/2}{\tilde{n}}, \quad \tilde{p} \pm z \sqrt{\frac{\tilde{p}(1-\tilde{p})}{\tilde{n}}}
 \end{equation}
 
-Figure \ref{fig:ci_suite} presents an integrated view of these three methodologies as implemented in the simulator's analysis dashboard.
+Figure~\ref{fig:ci_suite} presents an integrated view of these three methodologies as implemented in the simulator's analysis dashboard.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=1.0\textwidth]{ci_analysis_suite.png}
     \caption{Integrated Confidence Analysis dashboard, showcasing interval methodologies, numerical summaries, and $1/\sqrt{n}$ width shrinkage behavior.}
