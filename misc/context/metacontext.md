@@ -22,6 +22,7 @@
 - Standardize `.gitignore` and `Makefile` for clean, professional PDF builds (removed build junk).
 - Added sample technical report (`docs/sample/report.pdf`) as a reference for LaTeX-based documentation.
 - Created `docs/design/` directory for project planning; restructured `report_plan.md` to match visual-weighted sample structure (removed conclusion).
+- Integrated **User-Adjustable Confidence Levels** (0.80 to 0.99) across all UI metrics and technical visualizations.
 
 ## Statistical Methodology
 

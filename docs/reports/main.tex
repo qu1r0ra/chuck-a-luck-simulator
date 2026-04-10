@@ -111,7 +111,7 @@ As $n \to \infty$, the MLE estimate $\hat{p} = X/n$ converges to the a priori pr
 \end{figure}
 
 \subsection{Frequentist Confidence Intervals}
-To quantify uncertainty, we implement three Frequentist intervals. Let $z$ be the $1 - \alpha/2$ quantile of the standard normal distribution:
+To quantify uncertainty, we implement three Frequentist intervals. The application allows users to dynamically specify the confidence level $\alpha$ (defaulting to 95\%), which updates the critical $z$-score used in the calculations. Let $z$ be the $1 - \alpha/2$ quantile of the standard normal distribution:
 \begin{itemize}
     \item \textbf{Wald (Standard):} $\hat{p} \pm z \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}$
     \item \textbf{Wilson Score:} $\frac{\hat{p} + \frac{z^2}{2n} \pm z \sqrt{\frac{\hat{p}(1-\hat{p})}{n} + \frac{z^2}{4n^2}}}{1 + \frac{z^2}{n}}$

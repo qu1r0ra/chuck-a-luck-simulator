@@ -100,7 +100,7 @@ where $X$ is the count of successful outcomes and $n$ is the total number of rou
 
 ### 2. Confidence Intervals (CI)
 
-To quantify the uncertainty of the MLE estimate, we provide a comparison of three distinct frequentist intervals:
+To quantify the uncertainty of the MLE estimate, the application provides a comparison of three distinct frequentist intervals. The **confidence level $\alpha$ is user-adjustable** via the sidebar (defaulting to 95%), which dynamically updates the critical value $z$ used in the following derivations:
 
 - **Wald (Normal) Interval:** The standard approximation based on the Normal distribution. While computationally simple, it can produce "impossible" values (outside [0, 1]) and fails for small $n$ or extreme probabilities.
   - **Formula**: $\hat{p} \pm z \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}$
