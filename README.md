@@ -49,7 +49,7 @@ A high-level overview of the repository organization:
 │   ├── architecture.md     # Technical design and decisions
 │   ├── math/               # Mathematical derivation notes
 │   ├── reports/            # Generated PDF manuals and analysis
-│   ├── sample/             # Reference code samples
+│   ├── sample/             # Reference code and sample technical report
 │   └── specs/              # Formal project specifications
 ├── dump/                   # Temporary samples and reference material
 ├── man/                    # Generated help documentation (.Rd files)

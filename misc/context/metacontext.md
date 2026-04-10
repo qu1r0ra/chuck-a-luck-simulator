@@ -20,6 +20,7 @@
 - Delineate reactive logic dependency graph in `architecture.md`.
 - Extract "Historical Distribution" logic into dedicated `get_sample_distribution` function in `statistics.R`.
 - Standardize `.gitignore` and `Makefile` for clean, professional PDF builds (removed build junk).
+- Added sample technical report (`docs/sample/report.pdf`) as a reference for LaTeX-based documentation.
 
 ## Statistical Methodology
 

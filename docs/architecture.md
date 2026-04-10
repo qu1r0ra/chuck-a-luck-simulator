@@ -11,7 +11,7 @@ This document describes the architectural design and directory structure of the 
 │   ├── architecture.md     # Technical design (this document)
 │   ├── math/               # Mathematical derivation notes
 │   ├── reports/            # Generated PDF manuals and analysis
-│   ├── sample/             # Reference code samples
+│   ├── sample/             # Reference code and sample technical report
 │   └── specs/              # Formal project specifications
 ├── dump/                   # Temporary samples and reference material
 ├── man/                    # Generated help documentation (.Rd files)
