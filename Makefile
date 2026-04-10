@@ -29,7 +29,7 @@ test:
 doc:
 	Rscript -e "roxygen2::roxygenize()"
 	mkdir -p docs/reports
-	R CMD Rd2pdf . --output=docs/reports/manual.pdf --force
+	R CMD Rd2pdf . --output=docs/reports/manual.pdf --force --no-preview
 
 # Run the complete verification lifecycle (format, lint, test, doc)
 check: format lint test doc
