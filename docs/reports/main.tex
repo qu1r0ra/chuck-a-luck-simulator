@@ -49,14 +49,14 @@ Chuck-a-Luck is a binomial experiment where a player bets on a number $b \in \{1
 \begin{table}[h]
     \centering
     \caption{Chuck-a-Luck Theoretical Outcome Distribution}
-    \begin{tabular}{llcc}
+    \begin{tabular}{lll}
         \toprule
-        Outcome (Matches) & Combinations & Prob. (Ratio) & Prob. (\%) \\
+        Outcome (Matches) & Exact Ratio & Probability (\%) \\
         \midrule
-        0 Matches (Loss) & $125/216$ & 57.87\% \\
-        1 Match          & $75/216$  & 34.72\% \\
-        2 Matches         & $15/216$  & 6.94\%  \\
-        3 Matches         & $1/216$   & 0.46\%  \\
+        0 Matches (Loss)  & $125/216$   & 57.87\% \\
+        1 Match           & $75/216$    & 34.72\% \\
+        2 Matches         & $15/216$    & 6.94\%  \\
+        3 Matches         & $1/216$     & 0.46\%  \\
         \bottomrule
     \end{tabular}
     \label{tab:outcomes}
@@ -83,14 +83,14 @@ The application interface is designed to illustrate both the simulation setup an
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\textwidth]{ui_initial.png}
+    \includegraphics[width=1.0\textwidth]{ui_initial.png}
     \caption{The Chuck-a-Luck Simulator initial setup view.}
     \label{fig:ui_initial}
 \end{figure}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\textwidth]{ui_populated.png}
+    \includegraphics[width=1.0\textwidth]{ui_populated.png}
     \caption{The Simulator interface after $n=10,000$ trials, showing populated metrics and visualizations.}
     \label{fig:ui_populated}
 \end{figure}
@@ -103,7 +103,7 @@ As $n \to \infty$, the MLE estimate $\hat{p}$ converges to its theoretical count
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\textwidth]{lln_trace.png}
+    \includegraphics[width=1.0\textwidth]{lln_trace.png}
     \caption{Convergence Trace Plot demonstrating the Law of Large Numbers as the sample proportion stabilizes around $p=1/6$.}
     \label{fig:lln}
 \end{figure}
@@ -127,7 +127,7 @@ Figure \ref{fig:ci_suite} presents an integrated view of these three methodologi
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.9\textwidth]{ci_analysis_suite.png}
+    \includegraphics[width=1.0\textwidth]{ci_analysis_suite.png}
     \caption{Integrated Confidence Analysis dashboard, showcasing interval methodologies, numerical summaries, and $1/\sqrt{n}$ width shrinkage behavior.}
     \label{fig:ci_suite}
 \end{figure}
