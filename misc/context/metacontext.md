@@ -31,6 +31,18 @@
 - **Wilson**: Efficient for rare events like rolling 3 matches ($1/216$).
 - **Theoretical Probabilities**: Calculated using Binomial Distribution $B(3, 1/6)$.
 
+## Writing & Style Preferences
+
+- **Tone**: Professional, non-flowery, and technical. Avoid marketing-speak and overly descriptive adjectives.
+- **Removed Categories**: No "Conclusion" sections in technical reports.
+- **Terminology to Avoid**:
+  - "high-throughput", "high-performance" (use "vectorized" or "optimized" instead).
+  - "state-of-the-art", "cutting-edge".
+- **Documentation Structure**:
+  - Prioritize code-based explanations (e.g., citing `reactiveValues` or specific function names).
+  - Use separate figure environments for large visuals; avoid side-by-side comparison on one line if it compromises readability.
+  - Include detailed AI integration citations when requested.
+
 ## Performance
 
 - **Visual Analysis**: All plots utilize the **full simulation dataset** for maximum precision.
