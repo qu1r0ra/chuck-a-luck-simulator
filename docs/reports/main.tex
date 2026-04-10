@@ -34,25 +34,17 @@
 \begin{document}
 \maketitle
 
-% \begin{abstract}
-% The abstract.
-% \end{abstract}
+\begin{abstract}
+This report details the development and analysis of an interactive Chuck-a-Luck simulator. Using Monte Carlo methods, we evaluate the convergence properties of sample proportions and the performance of various frequentist confidence intervals. High-throughput trials confirm the $1/\sqrt{n}$ precision scaling and recover the theoretical house edge of -7.87\%.
+\end{abstract}
 
-% \keywords{Chuck-a-Luck \and Law of Large Numbers \and Monte Carlo Simulation \and Frequentist Intervals \and R Shiny \and Maximum Likelihood Estimation}
+\keywords{Chuck-a-Luck \and Law of Large Numbers \and Monte Carlo Simulation \and Frequentist Intervals \and R Shiny \and Maximum Likelihood Estimation}
 
 \section{Introduction}
-Chuck-a-Luck, also known as Bird Cage, is a classic dice game that serves as an excellent vehicle for demonstrating fundamental concepts in probability and statistics. This report presents the results of a high-performance simulation engine developed in R Shiny, transitioning the game from a mere gambling activity into a controlled statistical laboratory. Our primary objective is to empirically verify the Law of Large Numbers (LLN) and to evaluate the robustness of various Frequentist Confidence Intervals in quantifying the uncertainty of success probabilities, particularly for rare outcomes.
+Chuck-a-Luck, also known as Bird Cage, is a game where players bet on a number from 1 to 6. Three fair dice are rolled, and the player is paid based on the number of matching dice. Standard payouts are usually 1:1 for a single match, 2:1 for two matches, and 3:1 for three matches. If no dice match the chosen number, the wager is lost. This game is used to demonstrate fundamental concepts in probability and statistics \cite{diceplay}. This report analyzes a simulation engine developed in R Shiny. The primary objectives are to verify the Law of Large Numbers (LLN) and evaluate Frequentist Confidence Intervals in quantifying uncertainty for winning probabilities \cite{wizardofodds}.
 
-\section{Theoretical Probability and the House Advantage}
-The Chuck-a-Luck gamble is fundamentally a binomial experiment. A player bets on a number $b \in \{1, 2, 3, 4, 5, 6\}$, and three independent fair dice are rolled. The random variable $X$, representing the number of matches, follows a Binomial distribution $B(n=3, p=1/6)$. In this section, we derive the theoretical foundations of the game.
-
-\subsection{Outcome Probability Derivation}
-The probability of obtaining exactly $x$ matches is given by the probability mass function (PMF):
-\begin{equation}
-P(X=x) = \binom{3}{x} \left(\frac{1}{6}\right)^x \left(\frac{5}{6}\right)^{3-x}
-\end{equation}
-
-The sample space consists of $6^3 = 216$ equiprobable combinations. Table \ref{tab:outcomes} summarizes the net favorable outcomes and their associated winning probabilities.
+\section{Theoretical Foundations}
+Chuck-a-Luck is a binomial experiment where a player bets on a number $b \in \{1, 2, ..., 6\}$. Three fair dice are rolled, and the number of matches $X$ follows a Binomial distribution $B(3, 1/6)$. The sample space contains 216 combinations, summarized in Table \ref{tab:outcomes}.
 
 \begin{table}[h]
     \centering
@@ -61,82 +53,110 @@ The sample space consists of $6^3 = 216$ equiprobable combinations. Table \ref{t
         \toprule
         Outcome (Matches) & Combinations & Prob. (Ratio) & Prob. (\%) \\
         \midrule
-        0 Matches (Loss) & $1 \times 5 \times 5 \times 5$ & $125/216$ & 57.87\% \\
-        1 Match          & $3 \times 1 \times 5 \times 5$ & $75/216$  & 34.72\% \\
-        2 Matches         & $3 \times 1 \times 1 \times 5$ & $15/216$  & 6.94\%  \\
-        3 Matches         & $1 \times 1 \times 1 \times 1$ & $1/216$   & 0.46\%  \\
+        0 Matches (Loss) & $125/216$ & 57.87\% \\
+        1 Match          & $75/216$  & 34.72\% \\
+        2 Matches         & $15/216$  & 6.94\%  \\
+        3 Matches         & $1/216$   & 0.46\%  \\
         \bottomrule
     \end{tabular}
     \label{tab:outcomes}
 \end{table}
 
-\subsection{The House Edge}
-The House Edge represents the operator's mathematical advantage. It is calculated as the negative of the Expected Value $E[X]$ for a \$1 wager:
+The House Edge represents the operator's mathematical advantage, calculated as the negative of the Expected Value $E[X]$ for a \$1 wager:
 \begin{equation}
 E[X] = \sum_{i=0}^{3} P(X=i) \cdot \text{Payout}_i
 \end{equation}
-Using the standard payout structure ($\{-1, 1, 2, 3\}$), we calculate:
+Using standard payouts ($\{-1, 1, 2, 3\}$), we have:
 \begin{equation*}
 E[X] = \frac{125}{216}(-1) + \frac{75}{216}(1) + \frac{15}{216}(2) + \frac{1}{216}(3) = -\frac{17}{216} \approx -7.87\%
 \end{equation*}
-This confirms that for every \$100 wagered, a player is statistically expected to lose \$7.87 over the long run.
+This means that for every \$100 wagered, a player is statistically expected to lose \$7.87.
 
-\section{Computational Framework and Shiny Architecture}
-The simulator was developed using the R Shiny framework, optimized for high-throughput Monte Carlo trials.
+\section{Architecture and Implementation}
+The simulator is implemented using the R programming language \cite{rproject} and the Shiny web framework \cite{shiny}.
 
-\subsection{UI Component Design}
-\begin{itemize}
-    \item \textbf{Sidebar Control Plane:} Allows users to select their target number and simulation parameters, specifically trial count $n$ and payout variations.
-    \item \textbf{Dashboard Body:} Features reactive containers including \texttt{valueBox} for real-time metrics and \texttt{plotOutput} for visual analytics.
-\end{itemize}
+\subsection{Backend Logic and Optimization}
+To support large-scale simulations, we utilize a vectorized backend. Successes for each trial are calculated using row-weighted sums: \texttt{Matches <- rowSums(dice == target)}. This optimization enables sub-second execution even for millions of trials. Additionally, simulation state is persisted across multiple runs using \texttt{reactiveValues}, allowing users to cumulatively build a large dataset without reloading the session.
+
+\subsection{User Interface Design}
+The application interface is designed to illustrate both the simulation setup and the subsequent analysis phases. Figure 1 and 2 highlight the transition from a clean initial state to a populated dashboard.
 
 \begin{figure}[h]
     \centering
-    %\includegraphics[width=0.8\textwidth]{app_overview.png}
-    \caption{The Chuck-a-Luck Simulator dashboard interface showing real-time metrics and initial configuration.}
-    \label{fig:app_overview}
+    %\includegraphics[width=0.8\textwidth]{ui_initial.png}
+    \caption{The Chuck-a-Luck Simulator initial setup view.}
+    \label{fig:ui_initial}
 \end{figure}
 
-\section{Statistical Methodology and Results}
+\begin{figure}[h]
+    \centering
+    %\includegraphics[width=0.8\textwidth]{ui_populated.png}
+    \caption{The Simulator interface after $n=10,000$ trials, showing populated metrics and visualizations.}
+    \label{fig:ui_populated}
+\end{figure}
+
+\section{Statistical Analysis}
 We utilize the simulation engine to demonstrate frequentist convergence and quantify estimator uncertainty.
 
-\subsection{The Law of Large Numbers (LLN)}
-As $n \to \infty$, the MLE estimate $\hat{p} = X/n$ converges to the a priori probability $p=1/6$. The application tracks this convergence sequentially.
+\subsection{Law of Large Numbers and Convergence}
+As $n \to \infty$, the MLE estimate $\hat{p}$ and the sample Expected Value $E[X]_{sample}$ converge to their theoretical counterparts \cite{taboga2021}. Figures \ref{fig:house_edge_conv} and \ref{fig:lln} demonstrate this stabilization across increasing trial counts.
+
+\begin{figure}[h]
+    \centering
+    %\includegraphics[width=0.8\textwidth]{house_edge_convergence.png}
+    \caption{Expected Value convergence showing the empirical house edge stabilizing toward -7.87\%.}
+    \label{fig:house_edge_conv}
+\end{figure}
 
 \begin{figure}[h]
     \centering
     %\includegraphics[width=0.8\textwidth]{lln_trace.png}
-    \caption{Convergence Trace Plot demonstrating the Law of Large Numbers as the sample proportion stabilizes around the theoretical line.}
+    \caption{Convergence Trace Plot demonstrating the Law of Large Numbers as the sample proportion stabilizes around $p=1/6$.}
     \label{fig:lln}
 \end{figure}
 
 \subsection{Frequentist Confidence Intervals}
-To quantify uncertainty, we implement three Frequentist intervals. The application allows users to dynamically specify the confidence level $\alpha$ (defaulting to 95\%), which updates the critical $z$-score used in the calculations. Let $z$ be the $1 - \alpha/2$ quantile of the standard normal distribution:
-\begin{itemize}
-    \item \textbf{Wald (Standard):} $\hat{p} \pm z \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}$
-    \item \textbf{Wilson Score:} $\frac{\hat{p} + \frac{z^2}{2n} \pm z \sqrt{\frac{\hat{p}(1-\hat{p})}{n} + \frac{z^2}{4n^2}}}{1 + \frac{z^2}{n}}$
-    \item \textbf{Agresti-Coull:} Improves centering for rare events by adding pseudo-counts.
-\end{itemize}
+To quantify uncertainty for the estimate $\hat{p}$, we implement Wald, Wilson Score, and Agresti-Coull intervals. Let $z$ be the $1 - \alpha/2$ quantile of the standard normal distribution:
+
+\begin{equation}
+\text{Wald:} \quad \hat{p} \pm z \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}
+\end{equation}
+
+\begin{equation}
+\text{Wilson Score:} \quad \frac{\hat{p} + \frac{z^2}{2n} \pm z \sqrt{\frac{\hat{p}(1-\hat{p})}{n} + \frac{z^2}{4n^2}}}{1 + \frac{z^2}{n}}
+\end{equation}
+
+\begin{equation}
+\text{Agresti-Coull:} \quad \tilde{n} = n + z^2, \quad \tilde{p} = \frac{X + z^2/2}{\tilde{n}}, \quad \tilde{p} \pm z \sqrt{\frac{\tilde{p}(1-\tilde{p})}{\tilde{n}}}
+\end{equation}
 
 \begin{figure}[h]
     \centering
     %\includegraphics[width=0.8\textwidth]{ci_comparison.png}
-    \caption{Comparison of Wald, Wilson, and Agresti-Coull intervals for $X=3$ matches (rare outcome).}
+    \caption{Side-by-side comparison of intervals for the rare 3-match outcome.}
     \label{fig:ci_comparison}
 \end{figure}
 
 \begin{figure}[h]
     \centering
     %\includegraphics[width=0.8\textwidth]{ci_behavior.png}
-    \caption{Behavior of confidence intervals over increasing trial counts $n$, demonstrating the shrinkage of interval widths.}
+    \caption{Behavior of confidence intervals over increasing trial counts $n$, demonstrating the $1/\sqrt{n}$ shrinkage of interval widths and the convergence of methodologies.}
     \label{fig:ci_behavior}
 \end{figure}
 
-\section{Simulation Performance and AI Integration}
-The simulation utilizes a vectorized \texttt{data.table} backend, enabling $n = 10^7$ iterations with sub-second execution.
+Analytical results show that at small sample sizes, the Wald interval occasionally yields limits below 0, whereas the Wilson Score and Agresti-Coull methods remain robust. At large $n$, all three methods converge as the normal approximation becomes accurate.
 
-\subsection{AI Citation}
-The development of this project was facilitated by the Antigravity (Gemini) AI assistant. AI was utilized specifically for: (1) multi-file architectural planning, (2) code optimization and vectorization logic in R, and (3) standardization of GitHub-compatible mathematical typesetting across the documentation suite.
+\section{AI Integration and Citation}
+The development of this project was facilitated by the Antigravity (Gemini) AI assistant. AI was utilized specifically for:
+\begin{enumerate}
+    \item Multi-file architectural planning and repository structure design.
+    \item Code optimization and refactoring for vectorized simulation performance.
+    \item Mathematical derivation verification and LaTeX typesetting.
+    \item Generation of a comprehensive unit testing suite and validation checks.
+    \item Synchronization of technical documentation across various components.
+    \item UI/UX layout design and aesthetic refinement of the Shiny application.
+    \item Debugging complex reactive dependencies and state persistence logic.
+\end{enumerate}
 
 \bibliographystyle{unsrtnat}
 \bibliography{references}
