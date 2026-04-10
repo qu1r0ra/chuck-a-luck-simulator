@@ -106,7 +106,7 @@ To quantify the uncertainty of the MLE estimate, the application provides a comp
   - **Formula**: $\hat{p} \pm z \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}$
 - **Wilson Score Interval:** A more robust method that centers the interval correctly and provides better coverage for rare events. It is the preferred method for this simulator due to the low probability of rolling 3 matches ($1/216$).
   - **Formula**: $\frac{\hat{p} + \frac{z^2}{2n} \pm z \sqrt{\frac{\hat{p}(1-\hat{p})}{n} + \frac{z^2}{4n^2}}}{1 + \frac{z^2}{n}}$
-- **Agresti-Coull Interval:** Often called the "plus-four" interval, it improves the Wald interval by adding pseudo-counts (effectively 2 successes and 2 failures for 95% confidence).
+- **Agresti-Coull Interval:** Often called the "plus-four" interval, it improves the Wald interval by adding pseudo-counts (effectively 2 successes and 2 failures for 95% confidence). While significantly more stable than Wald, it is not strictly bounded and can still yield slightly negative limits for rare outcomes at very low sample sizes.
   - **Formula**: $\tilde{p} \pm z \sqrt{\frac{\tilde{p}(1-\tilde{p})}{\tilde{n}}}$ where $\tilde{n} = n + z^2$ and $\tilde{p} = \frac{X + z^2/2}{\tilde{n}}$
 
 ### 3. Convergence & the Law of Large Numbers

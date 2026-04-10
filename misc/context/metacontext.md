@@ -26,9 +26,9 @@
 
 ## Statistical Methodology
 
-- **Wald**: $\hat{p} \pm z\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}$ (Intentionally unclipped to demonstrate limits $<0$).
-- **Agresti-Coull**: Plus-four adjustment for 95% CI.
-- **Wilson**: Efficient for rare events like rolling 3 matches ($1/216$).
+- **Wald**: $\hat{p} \pm z\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}$ (Intentionally unclipped; yields limits $<0$).
+- **Agresti-Coull**: Plus-four adjustment (Intentionally unclipped; can still yield limits $<0$ at very low $n$).
+- **Wilson**: Efficient for rare events; mathematically bounded within $[0, 1]$.
 - **Theoretical Probabilities**: Calculated using Binomial Distribution $B(3, 1/6)$.
 
 ## Writing & Style Preferences
