@@ -4,12 +4,14 @@
 \alias{plot_ci_behavior}
 \title{Plot CI Behavior as sample size grows}
 \usage{
-plot_ci_behavior(sim_data, target_matches)
+plot_ci_behavior(sim_data, target_matches, conf_level = 0.95)
 }
 \arguments{
 \item{sim_data}{data.frame Simulation data}
 
 \item{target_matches}{integer The match count}
+
+\item{conf_level}{numeric Confidence level (default 0.95)}
 }
 \value{
 ggplot Ribbon plot

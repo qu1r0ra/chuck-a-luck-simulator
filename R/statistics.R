@@ -142,7 +142,7 @@ calc_wilson_ci <- function(p_hat, n, conf_level = 0.95) {
   lower <- (adj_p - moe) / denom
   upper <- (adj_p + moe) / denom
 
-  c(max(0, lower), min(1, upper))
+  c(lower, upper)
 }
 
 #' Calculate Agresti-Coull Confidence Interval
@@ -168,7 +168,7 @@ calc_agresti_coull_ci <- function(p_hat, n, conf_level = 0.95) {
 
   moe <- z * sqrt(tilde_p * (1 - tilde_p) / tilde_n)
 
-  c(max(0, tilde_p - moe), min(1, tilde_p + moe))
+  c(tilde_p - moe, tilde_p + moe)
 }
 
 #' Calculate Wald (Normal) Confidence Interval
@@ -187,7 +187,7 @@ calc_wald_ci <- function(p_hat, n, conf_level = 0.95) {
   }
 
   moe <- calc_moe_proportion(p_hat, n, conf_level)
-  c(max(0, p_hat - moe), min(1, p_hat + moe))
+  c(p_hat - moe, p_hat + moe)
 }
 
 #' Format a confidence interval for display from a vector

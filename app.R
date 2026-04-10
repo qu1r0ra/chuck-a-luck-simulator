@@ -30,6 +30,7 @@ ui <- page_navbar(
       ),
       selected = 2
     ),
+    sliderInput("conf_level", "Confidence Level:", min = 0.80, max = 0.99, value = 0.95, step = 0.01),
     helpText(
       "Select whether you want to focus the specific convergence graphs and statistics on rolling ",
       "exactly 2 matches or 3 matches."
@@ -108,13 +109,11 @@ ui <- page_navbar(
       card(
         card_header("Frequentist Estimates for Chosen Outcome"),
         p(strong("Target Outcome: "), textOutput("target_outcome_text", inline = TRUE)),
-        tags$ul(
-          tags$li(strong("MLE (Sample Probability): "), textOutput("sample_prob_out", inline = TRUE)),
-          tags$li(strong("Theoretical Probability: "), textOutput("theo_prob_out", inline = TRUE)),
-          tags$li(strong("Wald 95% CI: "), textOutput("ci_out", inline = TRUE)),
-          tags$li(strong("Wilson Score 95% CI: "), textOutput("wilson_ci_out", inline = TRUE)),
-          tags$li(strong("Agresti-Coull 95% CI: "), textOutput("agresti_ci_out", inline = TRUE))
-        )
+        p(strong("MLE (Sample Probability): "), textOutput("sample_prob_out", inline = TRUE)),
+        p(strong("Theoretical Probability: "), textOutput("theo_prob_out", inline = TRUE)),
+        p(strong("Wald 95% CI: "), textOutput("ci_out", inline = TRUE)),
+        p(strong("Wilson Score 95% CI: "), textOutput("wilson_ci_out", inline = TRUE)),
+        p(strong("Agresti-Coull 95% CI: "), textOutput("agresti_ci_out", inline = TRUE))
       )
     )
   ),
@@ -158,6 +157,10 @@ ui <- page_navbar(
 )
 
 server <- function(input, output, session) {
+  # ---------------------------------------------------------------------------
+  # 1. REACTIVE STATE PERSISTENCE
+  # ---------------------------------------------------------------------------
+  # Initialize the primary reactive containers for simulation data and bankroll.
   sim_state <- reactiveVal(data.table())
   bankroll <- reactiveVal(1000)
 
@@ -176,6 +179,10 @@ server <- function(input, output, session) {
     )
   })
 
+  # ---------------------------------------------------------------------------
+  # 2. SIMULATION TRIGGER & VECTORIZED LOGIC
+  # ---------------------------------------------------------------------------
+  # Observe simulation button click and execute vectorized trial generation.
   observeEvent(input$sim_btn, {
     new_sims <- simulate_chuck_a_luck(
       input$sim_rounds,
@@ -197,32 +204,15 @@ server <- function(input, output, session) {
     bankroll(bankroll() + sum(new_sims$NetWin))
   })
 
-  output$wilson_ci_out <- renderText({
-    dat <- sim_state()
-    n <- nrow(dat)
-    if (n == 0) {
-      return("[0.0000, 0.0000]")
-    }
-    tgt <- as.numeric(input$target_outcome)
-    p_hat <- calc_sample_probability(dat, tgt)
-    format_ci_vector(calc_wilson_ci(p_hat, n))
-  })
-
-  output$agresti_ci_out <- renderText({
-    dat <- sim_state()
-    n <- nrow(dat)
-    if (n == 0) {
-      return("[0.0000, 0.0000]")
-    }
-    tgt <- as.numeric(input$target_outcome)
-    p_hat <- calc_sample_probability(dat, tgt)
-    format_ci_vector(calc_agresti_coull_ci(p_hat, n))
-  })
-
   observeEvent(input$reset_btn, {
     sim_state(data.table())
     bankroll(input$initial_bankroll)
   })
+
+  # ---------------------------------------------------------------------------
+  # 3. OUTPUT RENDERING & REACTIVE UPDATES
+  # ---------------------------------------------------------------------------
+  # Re-render every metric and visualization whenever 'sim_state' changes.
 
   output$bankroll_out <- renderText({
     sprintf("$%s", format(bankroll(), big.mark = ","))
@@ -297,7 +287,7 @@ server <- function(input, output, session) {
       "0.0000"
     } else {
       p_hat <- calc_sample_probability(sim_state(), as.numeric(input$target_outcome))
-      moe <- calc_moe_proportion(p_hat, n)
+      moe <- calc_moe_proportion(p_hat, n, input$conf_level)
       sprintf("%.4f", moe)
     }
   })
@@ -309,18 +299,40 @@ server <- function(input, output, session) {
       return("[0.0000, 0.0000]")
     }
     p_hat <- calc_sample_probability(dat, as.numeric(input$target_outcome))
-    format_ci_vector(calc_wald_ci(p_hat, n))
+    format_ci_vector(calc_wald_ci(p_hat, n, input$conf_level))
+  })
+
+  output$wilson_ci_out <- renderText({
+    dat <- sim_state()
+    n <- nrow(dat)
+    if (n == 0) {
+      return("[0.0000, 0.0000]")
+    }
+    tgt <- as.numeric(input$target_outcome)
+    p_hat <- calc_sample_probability(dat, tgt)
+    format_ci_vector(calc_wilson_ci(p_hat, n))
+  })
+
+  output$agresti_ci_out <- renderText({
+    dat <- sim_state()
+    n <- nrow(dat)
+    if (n == 0) {
+      return("[0.0000, 0.0000]")
+    }
+    tgt <- as.numeric(input$target_outcome)
+    p_hat <- calc_sample_probability(dat, tgt)
+    format_ci_vector(calc_agresti_coull_ci(p_hat, n))
   })
 
   output$plot_ci_comp <- renderPlot({
     dat <- sim_state()
     n <- nrow(dat)
     p_hat <- if (n > 0) calc_sample_probability(dat, as.numeric(input$target_outcome)) else 0
-    plot_ci_comparison(p_hat, n)
+    plot_ci_comparison(p_hat, n, input$conf_level)
   })
 
   output$plot_ci_grow <- renderPlot({
-    plot_ci_behavior(sim_state(), as.numeric(input$target_outcome))
+    plot_ci_behavior(sim_state(), as.numeric(input$target_outcome), input$conf_level)
   })
 
   output$ci_metrics_table <- renderTable(
@@ -334,9 +346,9 @@ server <- function(input, output, session) {
       p_hat <- calc_sample_probability(dat, as.numeric(input$target_outcome))
       theo <- get_theoretical_prob(as.numeric(input$target_outcome))
 
-      wald <- calc_wald_ci(p_hat, n)
-      wilson <- calc_wilson_ci(p_hat, n)
-      agresti <- calc_agresti_coull_ci(p_hat, n)
+      wald <- calc_wald_ci(p_hat, n, input$conf_level)
+      wilson <- calc_wilson_ci(p_hat, n, input$conf_level)
+      agresti <- calc_agresti_coull_ci(p_hat, n, input$conf_level)
 
       data.frame(
         Metric = c(

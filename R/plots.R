@@ -122,9 +122,10 @@ plot_ci_comparison <- function(p_hat, n, conf_level = 0.95) {
 #' Plot CI Behavior as sample size grows
 #' @param sim_data data.frame Simulation data
 #' @param target_matches integer The match count
+#' @param conf_level numeric Confidence level (default 0.95)
 #' @return ggplot Ribbon plot
 #' @export
-plot_ci_behavior <- function(sim_data, target_matches) {
+plot_ci_behavior <- function(sim_data, target_matches, conf_level = 0.95) {
   if (nrow(sim_data) == 0) {
     ggplot() +
       theme_void() +
@@ -138,12 +139,12 @@ plot_ci_behavior <- function(sim_data, target_matches) {
       ) |>
       rowwise() |>
       mutate(
-        Wald_L = calc_wald_ci(SampleProb, n)[1],
-        Wald_U = calc_wald_ci(SampleProb, n)[2],
-        Wilson_L = calc_wilson_ci(SampleProb, n)[1],
-        Wilson_U = calc_wilson_ci(SampleProb, n)[2],
-        Agresti_L = calc_agresti_coull_ci(SampleProb, n)[1],
-        Agresti_U = calc_agresti_coull_ci(SampleProb, n)[2]
+        Wald_L = calc_wald_ci(SampleProb, n, conf_level)[1],
+        Wald_U = calc_wald_ci(SampleProb, n, conf_level)[2],
+        Wilson_L = calc_wilson_ci(SampleProb, n, conf_level)[1],
+        Wilson_U = calc_wilson_ci(SampleProb, n, conf_level)[2],
+        Agresti_L = calc_agresti_coull_ci(SampleProb, n, conf_level)[1],
+        Agresti_U = calc_agresti_coull_ci(SampleProb, n, conf_level)[2]
       ) |>
       ungroup()
 

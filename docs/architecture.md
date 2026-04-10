@@ -7,28 +7,32 @@ This document describes the architectural design and directory structure of the 
 ```text
 .
 ├── .github/                # CI/CD Workflows (GitHub Actions)
+├── assets/                 # Graphic assets (figures, readme images)
+│   ├── figures/            # Images for the technical report
+│   └── readme/             # Visuals for the project overview
 ├── docs/                   # Project documentation and reports
 │   ├── architecture.md     # Technical design (this document)
-│   ├── math/               # Mathematical derivation notes
-│   ├── reports/            # Generated PDF manuals and analysis
-│   ├── sample/             # Reference code samples
+│   ├── design/             # Project planning and design documents
+│   ├── reports/            # Generated PDF manuals and TeX components
+│   ├── sample/             # Reference code and sample technical report
 │   └── specs/              # Formal project specifications
-├── dump/                   # Temporary samples and reference material
-├── man/                    # Generated help documentation (.Rd files)
-├── misc/                   # Project context and personal notes
+├── man/                    # Generated R help documentation (.Rd files)
+├── misc/                   # Supplemental project context
+│   ├── context/            # AI agent persistence (metacontext)
+│   └── personal/           # Task tracking and developer notes
+├── R/                      # Core logic modules
+│   ├── constants.R         # Shared values and globals
+│   ├── plots.R             # Visualization logic
+│   ├── simulation.R        # RNG engine
+│   └── statistics.R        # Analytical functions
 ├── tests/                  # Unit testing suite
 │   ├── testthat/           # Core component tests
 │   └── testthat.R          # Test entry point
-├── R/                      # Core logic modules
-│   ├── constants.R         # Shared theoretical values and global variables
-│   ├── plots.R             # Visualization logic (ggplot2)
-│   ├── simulation.R        # RNG engine (vectorized dice rolls)
-│   └── statistics.R        # Analytical functions and CI calculations
-├── app.R                   # Main Shiny application (UI and Server)
-├── DESCRIPTION             # Project manifest and dependency management
-├── LICENSE                 # MIT License details
-├── Makefile                # Unified development entry points
-└── NAMESPACE               # Generated package exports
+├── app.R                   # Main Shiny application
+├── DESCRIPTION             # Project manifest
+├── LICENSE                 # MIT License
+├── Makefile                # Task runner
+└── NAMESPACE               # Package exports
 ```
 
 ## Core Design Principles
@@ -41,7 +45,15 @@ To support simulations of up to millions of rounds without UI lag, the project l
 - **Reactive State**: The main simulation history is stored as a `data.table` within a Shiny `reactiveVal`.
 - **UI Performance**: To ensure smooth browser interaction with large simulations, the front-end round log is capped at the last 1,000 observations while allowing plots to remain fully granular.
 
-### 2. Statistical Robustness (Wilson Score Interval)
+## 2. Reactive Logic Delineation
+
+The application utilizes a multi-layered reactive architecture inside the `server` function to ensure optimal performance and state persistence:
+
+1. **State Storage (`reactiveVal`)**: The primary simulation dataset is stored in `sim_state`. This allows results to be accumulated across multiple clicks of the "Simulate" button, enabling long-run statistical observation without refreshing the app.
+2. **Simulation Triggers (`observeEvent`)**: The core calculation logic is isolated within an observer that listens for the `sim_btn`. When triggered, it calls the `simulate_chuck_a_luck` function, which performs hundreds of thousands of trials in a single vectorized operation before appending them to the central state.
+3. **Output Rendering (`render*` functions)**: All metrics (House Edge, LLN plots, CI Analysis) are bound to the `sim_state`. This means that as soon as a new batch of trials is appended to the state, the entire dashboard updates automatically via R's reactive graph.
+
+## 3. Statistical Robustness
 
 We prioritize mathematical accuracy over simple approximations.
 
@@ -96,13 +108,13 @@ where $X$ is the count of successful outcomes and $n$ is the total number of rou
 
 ### 2. Confidence Intervals (CI)
 
-To quantify the uncertainty of the MLE estimate, we provide a comparison of three distinct frequentist intervals:
+To quantify the uncertainty of the MLE estimate, the application provides a comparison of three distinct frequentist intervals. The **confidence level $\alpha$ is user-adjustable** via the sidebar (defaulting to 95%), which dynamically updates the critical value $z$ used in the following derivations:
 
-- **Wald (Normal) Interval:** The standard approximation based on the Normal distribution. While computationally simple, it can produce "impossible" values (outside [0, 1]) and fails for small $n$ or extreme probabilities.
+- **Wald (Normal) Interval:** The standard approximation based on the Normal distribution. While computationally simple, it can produce "impossible" values (outside [0, 1]) for small $n$ or extreme probabilities. The simulator intentionally leaves these unclipped to demonstrate this analytical failure.
   - **Formula**: $\hat{p} \pm z \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}$
 - **Wilson Score Interval:** A more robust method that centers the interval correctly and provides better coverage for rare events. It is the preferred method for this simulator due to the low probability of rolling 3 matches ($1/216$).
   - **Formula**: $\frac{\hat{p} + \frac{z^2}{2n} \pm z \sqrt{\frac{\hat{p}(1-\hat{p})}{n} + \frac{z^2}{4n^2}}}{1 + \frac{z^2}{n}}$
-- **Agresti-Coull Interval:** Often called the "plus-four" interval, it improves the Wald interval by adding pseudo-counts (effectively 2 successes and 2 failures for 95% confidence).
+- **Agresti-Coull Interval:** Often called the "plus-four" interval, it improves the Wald interval by adding pseudo-counts (effectively 2 successes and 2 failures for 95% confidence). While significantly more stable than Wald, it is not strictly bounded and can still yield slightly negative limits for rare outcomes at very low sample sizes.
   - **Formula**: $\tilde{p} \pm z \sqrt{\frac{\tilde{p}(1-\tilde{p})}{\tilde{n}}}$ where $\tilde{n} = n + z^2$ and $\tilde{p} = \frac{X + z^2/2}{\tilde{n}}$
 
 ### 3. Convergence & the Law of Large Numbers

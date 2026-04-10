@@ -20,13 +20,28 @@
 - Delineate reactive logic dependency graph in `architecture.md`.
 - Extract "Historical Distribution" logic into dedicated `get_sample_distribution` function in `statistics.R`.
 - Standardize `.gitignore` and `Makefile` for clean, professional PDF builds (removed build junk).
+- Added sample technical report (`docs/sample/report.pdf`) as a reference for LaTeX-based documentation.
+- Created `docs/design/` directory for project planning; restructured `report_plan.md` to match visual-weighted sample structure (removed conclusion).
+- Integrated **User-Adjustable Confidence Levels** (0.80 to 0.99) across all UI metrics and technical visualizations.
 
 ## Statistical Methodology
 
-- **Wald**: $\hat{p} \pm z\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}$
-- **Agresti-Coull**: Plus-four adjustment for 95% CI.
-- **Wilson**: Efficient for rare events like rolling 3 matches ($1/216$).
+- **Wald**: $\hat{p} \pm z\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}$ (Intentionally unclipped; yields limits $<0$).
+- **Agresti-Coull**: Plus-four adjustment (Intentionally unclipped; can still yield limits $<0$ at very low $n$).
+- **Wilson**: Efficient for rare events; mathematically bounded within $[0, 1]$.
 - **Theoretical Probabilities**: Calculated using Binomial Distribution $B(3, 1/6)$.
+
+## Writing & Style Preferences
+
+- **Tone**: Professional, non-flowery, and technical. Avoid marketing-speak and overly descriptive adjectives.
+- **Removed Categories**: No "Conclusion" sections in technical reports.
+- **Terminology to Avoid**:
+  - "high-throughput", "high-performance" (use "vectorized" or "optimized" instead).
+  - "state-of-the-art", "cutting-edge".
+- **Documentation Structure**:
+  - Prioritize code-based explanations (e.g., citing `reactiveValues` or specific function names).
+  - Use separate figure environments for large visuals; avoid side-by-side comparison on one line if it compromises readability.
+  - Include detailed AI integration citations when requested.
 
 ## Performance
 
