@@ -17,7 +17,8 @@ An R Shiny application simulating the dice game '[Chuck-a-Luck](https://www.dice
 - [3. Running the Project](#3-running-the-project)
   - [3.1. Prerequisites](#31-prerequisites)
   - [3.2. CLI Entry Points](#32-cli-entry-points)
-  - [3.3. Reproducing the Results](#33-reproducing-the-results)
+  - [3.3. Project Reports](#33-project-reports)
+  - [3.4. Reproducing the Results](#34-reproducing-the-results)
 - [4. References](#4-references)
 
 ## 1. Introduction
@@ -94,7 +95,14 @@ This project provides unified `make` entry points for common tasks:
 - **`make doc`**: Rebuilds the `NAMESPACE`, help files (`man/`), and the PDF manual in `docs/reports/`.
 - **`make check`**: Runs the full pre-push lifecycle (doc, format, lint, and test).
 
-### 3.3. Reproducing the Results
+### 3.3. Project Reports
+
+For a deep dive into the statistical theory and architectural design:
+
+- **[Technical Paper](docs/reports/paper.pdf)**: A comprehensive inquiry into the Law of Large Numbers, Frequentist and Bayesian methodology, and simulation results.
+- **[Architecture Guide](docs/architecture.md)**: Detailed breakdown of the reactive logic, vectorized backend, and CI estimation algorithms.
+
+### 3.4. Reproducing the Results
 
 1. Clone this repository:
 
