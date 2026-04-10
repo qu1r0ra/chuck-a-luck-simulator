@@ -34,11 +34,11 @@
 \begin{document}
 \maketitle
 
-\begin{abstract}
-This report details the development and analysis of an interactive Chuck-a-Luck simulator. Using Monte Carlo methods, we evaluate the convergence properties of sample proportions and the performance of various frequentist confidence intervals. High-throughput trials confirm the $1/\sqrt{n}$ precision scaling and recover the theoretical house edge of -7.87\%.
-\end{abstract}
+% \begin{abstract}
+% This report details the development and analysis of an interactive Chuck-a-Luck simulator. Using Monte Carlo methods, we evaluate the convergence properties of sample proportions and the performance of various frequentist confidence intervals. High-throughput trials confirm the $1/\sqrt{n}$ precision scaling and recover the theoretical house edge of -7.87\%.
+% \end{abstract}
 
-\keywords{Chuck-a-Luck \and Law of Large Numbers \and Monte Carlo Simulation \and Frequentist Intervals \and R Shiny \and Maximum Likelihood Estimation}
+% \keywords{Chuck-a-Luck \and Law of Large Numbers \and Monte Carlo Simulation \and Frequentist Intervals \and R Shiny \and Maximum Likelihood Estimation}
 
 \section{Introduction}
 Chuck-a-Luck, also known as Bird Cage, is a game where players bet on a number from 1 to 6. Three fair dice are rolled, and the player is paid based on the number of matching dice. Standard payouts are usually 1:1 for a single match, 2:1 for two matches, and 3:1 for three matches. If no dice match the chosen number, the wager is lost. This game is used to demonstrate fundamental concepts in probability and statistics \cite{diceplay}. This report analyzes a simulation engine developed in R Shiny. The primary objectives are to verify the Law of Large Numbers (LLN) and evaluate Frequentist Confidence Intervals in quantifying uncertainty for winning probabilities \cite{wizardofodds}.
