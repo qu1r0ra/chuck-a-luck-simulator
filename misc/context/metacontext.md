@@ -21,6 +21,7 @@
 - Extract "Historical Distribution" logic into dedicated `get_sample_distribution` function in `statistics.R`.
 - Standardize `.gitignore` and `Makefile` for clean, professional PDF builds (removed build junk).
 - Added sample technical report (`docs/sample/report.pdf`) as a reference for LaTeX-based documentation.
+- Created `docs/design/` directory for project planning; restructured `report_plan.md` to match visual-weighted sample structure (removed conclusion).
 
 ## Statistical Methodology
 

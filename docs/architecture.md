@@ -7,28 +7,32 @@ This document describes the architectural design and directory structure of the 
 ```text
 .
 ├── .github/                # CI/CD Workflows (GitHub Actions)
+├── assets/                 # Graphic assets (figures, readme images)
+│   ├── figures/            # Images for the technical report
+│   └── readme/             # Visuals for the project overview
 ├── docs/                   # Project documentation and reports
 │   ├── architecture.md     # Technical design (this document)
-│   ├── math/               # Mathematical derivation notes
-│   ├── reports/            # Generated PDF manuals and analysis
+│   ├── design/             # Project planning and design documents
+│   ├── reports/            # Generated PDF manuals and TeX components
 │   ├── sample/             # Reference code and sample technical report
 │   └── specs/              # Formal project specifications
-├── dump/                   # Temporary samples and reference material
-├── man/                    # Generated help documentation (.Rd files)
-├── misc/                   # Project context and personal notes
+├── man/                    # Generated R help documentation (.Rd files)
+├── misc/                   # Supplemental project context
+│   ├── context/            # AI agent persistence (metacontext)
+│   └── personal/           # Task tracking and developer notes
+├── R/                      # Core logic modules
+│   ├── constants.R         # Shared values and globals
+│   ├── plots.R             # Visualization logic
+│   ├── simulation.R        # RNG engine
+│   └── statistics.R        # Analytical functions
 ├── tests/                  # Unit testing suite
 │   ├── testthat/           # Core component tests
 │   └── testthat.R          # Test entry point
-├── R/                      # Core logic modules
-│   ├── constants.R         # Shared theoretical values and global variables
-│   ├── plots.R             # Visualization logic (ggplot2)
-│   ├── simulation.R        # RNG engine (vectorized dice rolls)
-│   └── statistics.R        # Analytical functions and CI calculations
-├── app.R                   # Main Shiny application (UI and Server)
-├── DESCRIPTION             # Project manifest and dependency management
-├── LICENSE                 # MIT License details
-├── Makefile                # Unified development entry points
-└── NAMESPACE               # Generated package exports
+├── app.R                   # Main Shiny application
+├── DESCRIPTION             # Project manifest
+├── LICENSE                 # MIT License
+├── Makefile                # Task runner
+└── NAMESPACE               # Package exports
 ```
 
 ## Core Design Principles
