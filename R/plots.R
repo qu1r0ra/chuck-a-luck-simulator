@@ -190,8 +190,10 @@ plot_house_edge_convergence <- function(sim_data, theo_edge) {
     ggplot(plot_df, aes(x = n, y = RunningExpectedValue)) +
       geom_line(color = "#e74c3c", linewidth = 0.8) +
       geom_hline(yintercept = theo_edge, linetype = "dashed", color = "#2c3e50") +
-      annotate("text", x = 0, y = theo_edge, label = "Theoretical",
-               vjust = -1, hjust = 0, color = "#2c3e50") +
+      annotate("text",
+        x = 0, y = theo_edge, label = "Theoretical",
+        vjust = -1, hjust = 0, color = "#2c3e50"
+      ) +
       labs(
         title = "House Edge Convergence",
         subtitle = "Stabilization of Expected Value (EV) over total trials",
