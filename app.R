@@ -105,6 +105,19 @@ ui <- page_navbar(
       )
     ),
     layout_columns(
+      col_widths = c(12),
+      card(
+        card_header(
+          "House Edge Convergence",
+          tooltip(
+            bsicons::bs_icon("info-circle"),
+            "Shows how the running expected value stabilizes toward the theoretical house edge."
+          )
+        ),
+        plotOutput("plot_house_edge")
+      )
+    ),
+    layout_columns(
       col_widths = 12,
       card(
         card_header("Frequentist Estimates for Chosen Outcome"),
@@ -272,6 +285,10 @@ server <- function(input, output, session) {
 
   output$plot_lln <- renderPlot({
     plot_lln_convergence(sim_state(), as.numeric(input$target_outcome))
+  })
+
+  output$plot_house_edge <- renderPlot({
+    plot_house_edge_convergence(sim_state(), get_theoretical_house_edge(current_payouts()))
   })
 
   output$plot_dist <- renderPlot({

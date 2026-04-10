@@ -168,3 +168,37 @@ plot_ci_behavior <- function(sim_data, target_matches, conf_level = 0.95) {
       )
   }
 }
+
+#' Plot House Edge Convergence
+#' @param sim_data data.frame Simulation data
+#' @param theo_edge numeric Theoretical house edge
+#' @return ggplot Convergence plot
+#' @export
+plot_house_edge_convergence <- function(sim_data, theo_edge) {
+  if (nrow(sim_data) == 0) {
+    ggplot() +
+      theme_void() +
+      annotate("text", x = 0.5, y = 0.5, label = "No data yet. Run simulations!")
+  } else {
+    plot_df <- sim_data |>
+      mutate(
+        CumulativeProfit = cumsum(NetProfit),
+        RunningExpectedValue = CumulativeProfit / row_number(),
+        n = row_number()
+      )
+
+    ggplot(plot_df, aes(x = n, y = RunningExpectedValue)) +
+      geom_line(color = "#e74c3c", linewidth = 0.8) +
+      geom_hline(yintercept = theo_edge, linetype = "dashed", color = "#2c3e50") +
+      annotate("text", x = 0, y = theo_edge, label = "Theoretical",
+               vjust = -1, hjust = 0, color = "#2c3e50") +
+      labs(
+        title = "House Edge Convergence",
+        subtitle = "Stabilization of Expected Value (EV) over total trials",
+        x = "Number of Trials",
+        y = "Running Net Profit per $1"
+      ) +
+      theme_minimal(base_size = 14) +
+      theme(plot.title = element_text(face = "bold"))
+  }
+}
