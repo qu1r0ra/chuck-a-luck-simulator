@@ -48,3 +48,38 @@ test_that("Sample house edge handles edge cases", {
   sim <- data.frame(NetWin = 1)
   expect_equal(calc_sample_house_edge(sim, 1), -1)
 })
+
+test_that("CI width expands with higher confidence levels", {
+  n <- 100
+  p <- 0.5
+  ci_80 <- calc_wilson_ci(p, n, conf_level = 0.80)
+  ci_99 <- calc_wilson_ci(p, n, conf_level = 0.99)
+
+  width_80 <- ci_80[2] - ci_80[1]
+  width_99 <- ci_99[2] - ci_99[1]
+
+  expect_gt(width_99, width_80)
+})
+
+test_that("Wald interval correctly handles p=0 edge case (collapses)", {
+  # This verifies we documented its failure correctly
+  ci_wald <- calc_wald_ci(0, 100, 0.95)
+  expect_equal(ci_wald[1], 0)
+  expect_equal(ci_wald[2], 0)
+})
+
+test_that("CI methods converge at large n", {
+  # At n=1,000,000, standard errors are tiny, and all methods should yield ~the same
+  n <- 1e6
+  p <- 1 / 6
+  conf <- 0.95
+
+  wald <- calc_wald_ci(p, n, conf)
+  wilson <- calc_wilson_ci(p, n, conf)
+  agresti <- calc_agresti_coull_ci(p, n, conf)
+
+  # Check that they are equal within a very small tolerance (0.001)
+  expect_equal(wald[1], wilson[1], tolerance = 1e-3)
+  expect_equal(wilson[1], agresti[1], tolerance = 1e-3)
+  expect_equal(wald[2], agresti[2], tolerance = 1e-3)
+})
